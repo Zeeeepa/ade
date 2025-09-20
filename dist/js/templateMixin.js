@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.templateMixin = templateMixin;
 exports.templateStaticMixin = templateStaticMixin;
-const utils_1 = require("@mat3ra/code/dist/js/utils");
+const utils_1 = require("@mat3ra/utils");
 const JSONSchemasInterface_1 = __importDefault(require("@mat3ra/esse/dist/js/esse/JSONSchemasInterface"));
 const nunjucks_1 = __importDefault(require("nunjucks"));
 const ContextProviderRegistryContainer_1 = __importDefault(require("./context/ContextProviderRegistryContainer"));
@@ -73,7 +73,7 @@ function templateMixin(item) {
         _cleanRenderingContext(object) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { job, ...clone } = object;
-            return (0, utils_1.deepClone)(clone);
+            return utils_1.Utils.clone.deepClone(clone);
         },
         /*
          * @summary Initializes context provider class instances. `providerContext` is used to pass the data about any

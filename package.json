@@ -72,12 +72,13 @@
     },
     "peerDependencies": {
         "@exabyte-io/application-flavors.js": "*",
+        "@mat3ra/utils": "*",
         "@mat3ra/code": "*",
         "@mat3ra/esse": "*",
         "@mat3ra/made": "*"
     },
     "engines": {
-        "node": ">=12.0.0"
+        "node": ">=20.0.0"
     },
     "lint-staged": {
         "*.js": "eslint --cache --fix",
