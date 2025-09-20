@@ -1,6 +1,6 @@
 import type { InMemoryEntity } from "@mat3ra/code/dist/js/entity";
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
-import { deepClone } from "@mat3ra/code/dist/js/utils";
+import { Utils } from "@mat3ra/utils";
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import JSONSchemasInterface from "@mat3ra/esse/dist/js/esse/JSONSchemasInterface";
 import type { AnyObject } from "@mat3ra/esse/dist/js/esse/types";
@@ -121,7 +121,7 @@ export function templateMixin(item: TemplateBase) {
         _cleanRenderingContext(object: Record<string, unknown>) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { job, ...clone } = object;
-            return deepClone(clone);
+            return Utils.clone.deepClone(clone);
         },
 
         /*

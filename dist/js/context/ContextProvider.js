@@ -15,7 +15,7 @@ exports.ContextProviderName = void 0;
  *             to next one, for example data about material to track when it is changed.
  * @notes   Should hold static data only (see `setData` method), no classes or functions
  */
-const utils_1 = require("@mat3ra/code/dist/js/utils");
+const utils_1 = require("@mat3ra/utils");
 const lodash_1 = __importDefault(require("lodash"));
 // TODO: separate application-specific CPs
 var ContextProviderName;
@@ -90,7 +90,7 @@ class ContextProvider {
         return this.isEdited ? this.data : this.defaultData;
     }
     setData(data) {
-        this.data = (0, utils_1.deepClone)(data);
+        this.data = utils_1.Utils.clone.deepClone(data);
     }
     // override in children
     // eslint-disable-next-line class-methods-use-this

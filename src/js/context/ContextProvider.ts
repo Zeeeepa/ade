@@ -9,7 +9,7 @@
  *             to next one, for example data about material to track when it is changed.
  * @notes   Should hold static data only (see `setData` method), no classes or functions
  */
-import { deepClone } from "@mat3ra/code/dist/js/utils";
+import { Utils } from "@mat3ra/utils";
 import lodash from "lodash";
 
 export interface ContextProviderInstance {
@@ -131,7 +131,7 @@ export default class ContextProvider {
     }
 
     setData(data: object) {
-        this.data = deepClone(data);
+        this.data = Utils.clone.deepClone(data);
     }
 
     // override in children
