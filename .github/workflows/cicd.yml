@@ -17,7 +17,6 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 14.x
           - 20.x
 
     steps:
@@ -57,4 +56,3 @@ jobs:
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
           github-token: ${{ secrets.BOT_GITHUB_TOKEN }}
-
