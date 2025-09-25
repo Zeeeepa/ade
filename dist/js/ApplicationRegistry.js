@@ -15,7 +15,7 @@ class ApplicationRegistry {
         return new application_1.default({ ...staticConfig, name, version, build });
     }
     static getUniqueAvailableApplicationNames() {
-        return standata_1.ApplicationStandata.getUniqueAvailableApplicationNames();
+        return standata_1.ApplicationStandata.getAllApplicationNames();
     }
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
@@ -30,7 +30,7 @@ class ApplicationRegistry {
         }
         const applicationsTree = {};
         const applicationsArray = [];
-        const allApplications = standata_1.ApplicationStandata.getUniqueAvailableApplicationNames();
+        const allApplications = standata_1.ApplicationStandata.getAllApplicationNames();
         allApplications.forEach((appName) => {
             const { versions, defaultVersion, ...appData } = standata_1.ApplicationStandata.getAppData(appName);
             const appTreeItem = { defaultVersion };
@@ -125,7 +125,7 @@ class ApplicationRegistry {
         const execName = flavor.prop("executableName", "");
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
-            const filtered = standata_1.ApplicationStandata.findTemplatesByName(appName, execName, inputName);
+            const filtered = standata_1.ApplicationStandata.getTemplatesByName(appName, execName, inputName);
             if (filtered.length !== 1) {
                 console.log(`found ${filtered.length} templates for app=${appName} exec=${execName} name=${inputName} expected 1`);
             }

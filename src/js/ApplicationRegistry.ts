@@ -1,7 +1,6 @@
-import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import { getOneMatchFromObject } from "@mat3ra/code/dist/js/utils/object";
 import type { ApplicationSchemaBase, ExecutableSchema } from "@mat3ra/esse/dist/js/types";
-import { ApplicationStandata } from "@mat3ra/standata";
+import { type ApplicationName, ApplicationStandata } from "@mat3ra/standata";
 
 import Application from "./application";
 import Executable from "./executable";
@@ -37,7 +36,7 @@ export default class ApplicationRegistry {
     }
 
     static getUniqueAvailableApplicationNames() {
-        return ApplicationStandata.getUniqueAvailableApplicationNames();
+        return ApplicationStandata.getAllApplicationNames();
     }
 
     /**
@@ -55,7 +54,7 @@ export default class ApplicationRegistry {
         const applicationsTree: ApplicationTree = {};
         const applicationsArray: ApplicationSchemaBase[] = [];
 
-        const allApplications = ApplicationStandata.getUniqueAvailableApplicationNames();
+        const allApplications = ApplicationStandata.getAllApplicationNames();
         allApplications.forEach((appName) => {
             const { versions, defaultVersion, ...appData } =
                 ApplicationStandata.getAppData(appName);
@@ -187,7 +186,7 @@ export default class ApplicationRegistry {
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
 
-            const filtered = ApplicationStandata.findTemplatesByName(appName, execName, inputName);
+            const filtered = ApplicationStandata.getTemplatesByName(appName, execName, inputName);
 
             if (filtered.length !== 1) {
                 console.log(

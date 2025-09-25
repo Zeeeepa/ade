@@ -1,9 +1,9 @@
-import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import type { InMemoryEntity } from "@mat3ra/code/dist/js/entity";
 import type { DefaultableInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/DefaultableMixin";
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
+import type { ApplicationName } from "@mat3ra/standata";
 import Executable from "./executable";
 type Base = InMemoryEntity & NamedInMemoryEntity & DefaultableInMemoryEntity;
 export type BaseConstructor = Constructor<Base> & {

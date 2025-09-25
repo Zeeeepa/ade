@@ -1,5 +1,5 @@
-import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
+import { type ApplicationName } from "@mat3ra/standata";
 import Application from "./application";
 import Executable from "./executable";
 import Flavor from "./flavor";
@@ -21,7 +21,7 @@ export default class ApplicationRegistry {
     static applicationsTree?: ApplicationTree;
     static applicationsArray?: ApplicationSchemaBase[];
     static createApplication({ name, version, build }: CreateApplicationConfig): Application;
-    static getUniqueAvailableApplicationNames(): import("@mat3ra/standata").ApplicationName[];
+    static getUniqueAvailableApplicationNames(): ApplicationName[];
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
      * @returns containing applications and applicationConfigs
