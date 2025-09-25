@@ -1,8 +1,9 @@
 import { getOneMatchFromObject } from "@mat3ra/code/dist/js/utils/object";
 import type { ApplicationSchemaBase, ExecutableSchema } from "@mat3ra/esse/dist/js/types";
-import { type ApplicationName, ApplicationStandata } from "@mat3ra/standata";
+import { ApplicationStandata } from "@mat3ra/standata";
 
 import Application from "./application";
+import { ApplicationName } from "./applicationMixin";
 import Executable from "./executable";
 import Flavor from "./flavor";
 import Template from "./template";

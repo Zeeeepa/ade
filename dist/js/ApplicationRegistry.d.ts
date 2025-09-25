@@ -1,6 +1,6 @@
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
-import { type ApplicationName } from "@mat3ra/standata";
 import Application from "./application";
+import { ApplicationName } from "./applicationMixin";
 import Executable from "./executable";
 import Flavor from "./flavor";
 import Template from "./template";
@@ -21,13 +21,13 @@ export default class ApplicationRegistry {
     static applicationsTree?: ApplicationTree;
     static applicationsArray?: ApplicationSchemaBase[];
     static createApplication({ name, version, build }: CreateApplicationConfig): Application;
-    static getUniqueAvailableApplicationNames(): ApplicationName[];
+    static getUniqueAvailableApplicationNames(): string[];
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
      * @returns containing applications and applicationConfigs
      */
     static getAllApplications(): {
-        applicationsTree: Partial<Record<ApplicationName, ApplicationTreeItem>>;
+        applicationsTree: Partial<Record<string, ApplicationTreeItem>>;
         applicationsArray: ApplicationSchemaBase[];
     };
     /**

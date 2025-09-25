@@ -3,12 +3,13 @@ import type { DefaultableInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixi
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
-import type { ApplicationName } from "@mat3ra/standata";
 import Executable from "./executable";
 type Base = InMemoryEntity & NamedInMemoryEntity & DefaultableInMemoryEntity;
 export type BaseConstructor = Constructor<Base> & {
     constructCustomExecutable?: (config: object) => Executable;
 };
+declare const ApplicationNames: string[];
+export type ApplicationName = typeof ApplicationNames[number];
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
 export type ApplicationMixin = {
     summary: string | undefined;
