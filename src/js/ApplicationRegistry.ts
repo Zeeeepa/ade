@@ -1,12 +1,7 @@
-import {
-    type ApplicationName,
-    allApplications,
-    allTemplates,
-    getAppData,
-    getAppTree,
-} from "@exabyte-io/application-flavors.js";
+import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import { getOneMatchFromObject } from "@mat3ra/code/dist/js/utils/object";
 import type { ApplicationSchemaBase, ExecutableSchema } from "@mat3ra/esse/dist/js/types";
+import { ApplicationStandata } from "@mat3ra/standata";
 
 import Application from "./application";
 import Executable from "./executable";
@@ -42,7 +37,7 @@ export default class ApplicationRegistry {
     }
 
     static getUniqueAvailableApplicationNames() {
-        return allApplications;
+        return ApplicationStandata.getUniqueAvailableApplicationNames();
     }
 
     /**
@@ -60,8 +55,11 @@ export default class ApplicationRegistry {
         const applicationsTree: ApplicationTree = {};
         const applicationsArray: ApplicationSchemaBase[] = [];
 
+        const allApplications = ApplicationStandata.getUniqueAvailableApplicationNames();
         allApplications.forEach((appName) => {
-            const { versions, defaultVersion, ...appData } = getAppData(appName);
+            const { versions, defaultVersion, ...appData } =
+                ApplicationStandata.getAppData(appName);
+
             const appTreeItem: ApplicationTreeItem = { defaultVersion };
 
             versions.forEach((versionInfo) => {
@@ -127,7 +125,7 @@ export default class ApplicationRegistry {
     }
 
     static getExecutables({ name, version }: { name: ApplicationName; version?: string }) {
-        const tree = getAppTree(name);
+        const tree = ApplicationStandata.getAppTree(name);
 
         return Object.keys(tree)
             .filter((key) => {
@@ -142,7 +140,7 @@ export default class ApplicationRegistry {
     }
 
     static getExecutableByName(appName: ApplicationName, execName?: string) {
-        const appTree = getAppTree(appName);
+        const appTree = ApplicationStandata.getAppTree(appName);
 
         Object.entries(appTree).forEach(([name, exec]) => {
             exec.name = name;
@@ -183,18 +181,13 @@ export default class ApplicationRegistry {
 
     // flavors
     static getInputAsTemplates(flavor: Flavor) {
-        const appName = flavor.prop("applicationName", "");
+        const appName = flavor.prop("applicationName", "") as ApplicationName;
         const execName = flavor.prop("executableName", "");
 
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
 
-            const filtered = allTemplates.filter(
-                (temp) =>
-                    temp.applicationName === appName &&
-                    temp.executableName === execName &&
-                    temp.name === inputName,
-            );
+            const filtered = ApplicationStandata.findTemplatesByName(appName, execName, inputName);
 
             if (filtered.length !== 1) {
                 console.log(
