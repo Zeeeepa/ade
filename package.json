@@ -75,7 +75,8 @@
         "@mat3ra/utils": "*",
         "@mat3ra/code": "*",
         "@mat3ra/esse": "*",
-        "@mat3ra/made": "*"
+        "@mat3ra/made": "*",
+        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#d875eb01eb354c330aa69b5f55324c8c9aef8b86"
     },
     "engines": {
         "node": ">=20.0.0"
