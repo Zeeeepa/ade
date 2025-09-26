@@ -428,7 +428,7 @@ describe("ApplicationRegistry", () => {
             expect(() => {
                 // @ts-expect-error - we want to test the error case
                 ApplicationRegistry.getAllFlavorsForApplication("nonexistent");
-            }).to.throw("nonexistent is not a known application with a tree.");
+            }).to.throw("nonexistent is not a known application with executable tree.");
         });
     });
 
