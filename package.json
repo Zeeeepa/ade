@@ -39,11 +39,11 @@
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.16.3",
-        "@exabyte-io/application-flavors.js": "2024.9.8-1",
         "@exabyte-io/eslint-config": "2025.5.13-0",
         "@mat3ra/code": "2025.8.7-0",
         "@mat3ra/esse": "2025.8.14-0",
         "@mat3ra/made": "2025.7.15-0",
+        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#d875eb01eb354c330aa69b5f55324c8c9aef8b86",
         "@mat3ra/tsconfig": "2024.6.3-0",
         "@types/nunjucks": "^3.2.6",
         "@typescript-eslint/eslint-plugin": "^5.9.1",
@@ -71,12 +71,11 @@
         "typescript": "^5.6.0"
     },
     "peerDependencies": {
-        "@exabyte-io/application-flavors.js": "*",
         "@mat3ra/utils": "*",
         "@mat3ra/code": "*",
         "@mat3ra/esse": "*",
         "@mat3ra/made": "*",
-        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#d875eb01eb354c330aa69b5f55324c8c9aef8b86"
+        "@mat3ra/standata": "*"
     },
     "engines": {
         "node": ">=20.0.0"
