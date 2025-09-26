@@ -15,7 +15,7 @@ export type BaseConstructor = Constructor<Base> & {
 };
 
 // generate types dynamically based on values of enum
-const ApplicationNames = ApplicationStandata.getAllApplicationNames();
+const ApplicationNames = new ApplicationStandata().getAllApplicationNames();
 export type ApplicationName = typeof ApplicationNames[number];
 
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;

@@ -37,7 +37,7 @@ export default class ApplicationRegistry {
     }
 
     static getUniqueAvailableApplicationNames() {
-        return ApplicationStandata.getAllApplicationNames();
+        return new ApplicationStandata().getAllApplicationNames();
     }
 
     /**
@@ -55,10 +55,10 @@ export default class ApplicationRegistry {
         const applicationsTree: ApplicationTree = {};
         const applicationsArray: ApplicationSchemaBase[] = [];
 
-        const allApplications = ApplicationStandata.getAllApplicationNames();
+        const allApplications = new ApplicationStandata().getAllApplicationNames();
         allApplications.forEach((appName) => {
             const { versions, defaultVersion, ...appData } =
-                ApplicationStandata.getAppData(appName);
+                new ApplicationStandata().getAppDataForApplication(appName);
 
             const appTreeItem: ApplicationTreeItem = { defaultVersion };
 
@@ -125,7 +125,7 @@ export default class ApplicationRegistry {
     }
 
     static getExecutables({ name, version }: { name: ApplicationName; version?: string }) {
-        const tree = ApplicationStandata.getAppTree(name);
+        const tree = new ApplicationStandata().getAppTreeForApplication(name);
 
         return Object.keys(tree)
             .filter((key) => {
@@ -140,7 +140,7 @@ export default class ApplicationRegistry {
     }
 
     static getExecutableByName(appName: ApplicationName, execName?: string) {
-        const appTree = ApplicationStandata.getAppTree(appName);
+        const appTree = new ApplicationStandata().getAppTreeForApplication(appName);
 
         Object.entries(appTree).forEach(([name, exec]) => {
             exec.name = name;
@@ -187,7 +187,11 @@ export default class ApplicationRegistry {
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
 
-            const filtered = ApplicationStandata.getTemplatesByName(appName, execName, inputName);
+            const filtered = new ApplicationStandata().getTemplatesByName(
+                appName,
+                execName,
+                inputName,
+            );
 
             if (filtered.length !== 1) {
                 console.log(

@@ -15,7 +15,7 @@ class ApplicationRegistry {
         return new application_1.default({ ...staticConfig, name, version, build });
     }
     static getUniqueAvailableApplicationNames() {
-        return standata_1.ApplicationStandata.getAllApplicationNames();
+        return new standata_1.ApplicationStandata().getAllApplicationNames();
     }
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
@@ -30,9 +30,9 @@ class ApplicationRegistry {
         }
         const applicationsTree = {};
         const applicationsArray = [];
-        const allApplications = standata_1.ApplicationStandata.getAllApplicationNames();
+        const allApplications = new standata_1.ApplicationStandata().getAllApplicationNames();
         allApplications.forEach((appName) => {
-            const { versions, defaultVersion, ...appData } = standata_1.ApplicationStandata.getAppData(appName);
+            const { versions, defaultVersion, ...appData } = new standata_1.ApplicationStandata().getAppDataForApplication(appName);
             const appTreeItem = { defaultVersion };
             versions.forEach((versionInfo) => {
                 const { version, build = "Default" } = versionInfo;
@@ -80,7 +80,7 @@ class ApplicationRegistry {
         return (_a = appVersion[build]) !== null && _a !== void 0 ? _a : null;
     }
     static getExecutables({ name, version }) {
-        const tree = standata_1.ApplicationStandata.getAppTree(name);
+        const tree = new standata_1.ApplicationStandata().getAppTreeForApplication(name);
         return Object.keys(tree)
             .filter((key) => {
             const executable = tree[key];
@@ -91,7 +91,7 @@ class ApplicationRegistry {
             .map((key) => new executable_1.default({ ...tree[key], name: key }));
     }
     static getExecutableByName(appName, execName) {
-        const appTree = standata_1.ApplicationStandata.getAppTree(appName);
+        const appTree = new standata_1.ApplicationStandata().getAppTreeForApplication(appName);
         Object.entries(appTree).forEach(([name, exec]) => {
             exec.name = name;
         });
@@ -125,7 +125,7 @@ class ApplicationRegistry {
         const execName = flavor.prop("executableName", "");
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
-            const filtered = standata_1.ApplicationStandata.getTemplatesByName(appName, execName, inputName);
+            const filtered = new standata_1.ApplicationStandata().getTemplatesByName(appName, execName, inputName);
             if (filtered.length !== 1) {
                 console.log(`found ${filtered.length} templates for app=${appName} exec=${execName} name=${inputName} expected 1`);
             }

@@ -8,7 +8,7 @@ exports.applicationStaticMixin = applicationStaticMixin;
 const JSONSchemasInterface_1 = __importDefault(require("@mat3ra/esse/dist/js/esse/JSONSchemasInterface"));
 const standata_1 = require("@mat3ra/standata");
 // generate types dynamically based on values of enum
-const ApplicationNames = standata_1.ApplicationStandata.getAllApplicationNames();
+const ApplicationNames = new standata_1.ApplicationStandata().getAllApplicationNames();
 function applicationMixin(item) {
     // @ts-expect-error
     const properties = {

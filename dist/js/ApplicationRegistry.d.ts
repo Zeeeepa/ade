@@ -21,13 +21,13 @@ export default class ApplicationRegistry {
     static applicationsTree?: ApplicationTree;
     static applicationsArray?: ApplicationSchemaBase[];
     static createApplication({ name, version, build }: CreateApplicationConfig): Application;
-    static getUniqueAvailableApplicationNames(): import("@mat3ra/standata").ApplicationName[];
+    static getUniqueAvailableApplicationNames(): string[];
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
      * @returns containing applications and applicationConfigs
      */
     static getAllApplications(): {
-        applicationsTree: Partial<Record<import("@mat3ra/standata").ApplicationName, ApplicationTreeItem>>;
+        applicationsTree: Partial<Record<string, ApplicationTreeItem>>;
         applicationsArray: ApplicationSchemaBase[];
     };
     /**
