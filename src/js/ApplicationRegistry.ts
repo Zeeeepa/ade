@@ -3,7 +3,6 @@ import type { ApplicationSchemaBase, ExecutableSchema } from "@mat3ra/esse/dist/
 import { ApplicationStandata } from "@mat3ra/standata";
 
 import Application from "./application";
-import { ApplicationName } from "./applicationMixin";
 import Executable from "./executable";
 import Flavor from "./flavor";
 import Template from "./template";
@@ -18,12 +17,12 @@ type ApplicationTreeItem = {
 };
 
 export type CreateApplicationConfig = {
-    name: ApplicationName;
+    name: string;
     version?: string | null;
     build?: string;
 };
 
-type ApplicationTree = Partial<Record<ApplicationName, ApplicationTreeItem>>;
+type ApplicationTree = Partial<Record<string, ApplicationTreeItem>>;
 
 export default class ApplicationRegistry {
     // applications
@@ -78,6 +77,10 @@ export default class ApplicationRegistry {
                     ...versionInfo,
                 };
 
+                if (versionInfo.isDefault) {
+                    appVersion.Default = applicationConfig;
+                }
+
                 appVersion[build] = applicationConfig;
                 applicationsArray.push(applicationConfig);
             });
@@ -124,7 +127,7 @@ export default class ApplicationRegistry {
         return appVersion[build] ?? null;
     }
 
-    static getExecutables({ name, version }: { name: ApplicationName; version?: string }) {
+    static getExecutables({ name, version }: { name: string; version?: string }) {
         const tree = new ApplicationStandata().getAppTreeForApplication(name);
 
         return Object.keys(tree)
@@ -139,7 +142,7 @@ export default class ApplicationRegistry {
             .map((key) => new Executable({ ...tree[key], name: key }));
     }
 
-    static getExecutableByName(appName: ApplicationName, execName?: string) {
+    static getExecutableByName(appName: string, execName?: string) {
         const appTree = new ApplicationStandata().getAppTreeForApplication(appName);
 
         Object.entries(appTree).forEach(([name, exec]) => {
@@ -154,7 +157,7 @@ export default class ApplicationRegistry {
     }
 
     // TODO: remove this method and use getApplicationExecutableByName directly
-    static getExecutableByConfig(appName: ApplicationName, config?: { name: string }) {
+    static getExecutableByConfig(appName: string, config?: { name: string }) {
         return this.getExecutableByName(appName, config?.name);
     }
 
@@ -181,7 +184,7 @@ export default class ApplicationRegistry {
 
     // flavors
     static getInputAsTemplates(flavor: Flavor) {
-        const appName = flavor.prop("applicationName", "") as ApplicationName;
+        const appName = flavor.prop("applicationName", "");
         const execName = flavor.prop("executableName", "");
 
         return flavor.input.map((input) => {
@@ -209,7 +212,7 @@ export default class ApplicationRegistry {
         });
     }
 
-    static getAllFlavorsForApplication(appName: ApplicationName, version?: string) {
+    static getAllFlavorsForApplication(appName: string, version?: string) {
         const allExecutables = this.getExecutables({ name: appName, version });
 
         return allExecutables.flatMap((executable) => this.getExecutableFlavors(executable));

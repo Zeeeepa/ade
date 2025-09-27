@@ -45,6 +45,9 @@ class ApplicationRegistry {
                     build,
                     ...versionInfo,
                 };
+                if (versionInfo.isDefault) {
+                    appVersion.Default = applicationConfig;
+                }
                 appVersion[build] = applicationConfig;
                 applicationsArray.push(applicationConfig);
             });

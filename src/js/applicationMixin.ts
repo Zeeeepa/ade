@@ -4,7 +4,6 @@ import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/Nam
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import JSONSchemasInterface from "@mat3ra/esse/dist/js/esse/JSONSchemasInterface";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
-import { ApplicationStandata } from "@mat3ra/standata";
 
 import Executable from "./executable";
 
@@ -14,10 +13,6 @@ export type BaseConstructor = Constructor<Base> & {
     constructCustomExecutable?: (config: object) => Executable;
 };
 
-// generate types dynamically based on values of enum
-const ApplicationNames = new ApplicationStandata().getAllApplicationNames();
-export type ApplicationName = typeof ApplicationNames[number];
-
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
 
 export type ApplicationMixin = {
@@ -25,7 +20,7 @@ export type ApplicationMixin = {
     version: string;
     build: string | undefined;
     shortName: string;
-    name: ApplicationName;
+    name: string;
     hasAdvancedComputeOptions: boolean;
     isLicensed: boolean;
     isUsingMaterial: boolean;

@@ -8,15 +8,13 @@ type Base = InMemoryEntity & NamedInMemoryEntity & DefaultableInMemoryEntity;
 export type BaseConstructor = Constructor<Base> & {
     constructCustomExecutable?: (config: object) => Executable;
 };
-declare const ApplicationNames: string[];
-export type ApplicationName = typeof ApplicationNames[number];
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
 export type ApplicationMixin = {
     summary: string | undefined;
     version: string;
     build: string | undefined;
     shortName: string;
-    name: ApplicationName;
+    name: string;
     hasAdvancedComputeOptions: boolean;
     isLicensed: boolean;
     isUsingMaterial: boolean;
