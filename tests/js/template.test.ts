@@ -313,6 +313,21 @@ describe("Template", () => {
                 template.getDataFromProvidersForRenderingContext = originalMethod;
             });
         });
+
+        // Added with LLM to help with coverage
+        it("should handle getDataFromProvidersForPersistentContext with edited providers", () => {
+            const editedProvider = new MockContextProvider({ name: "QGridFormDataManager", domain: "test" });
+            editedProvider.isEdited = true;
+            editedProvider.yieldData = () => ({ data: { value: 1 } });
+
+            const nonEditedProvider = new MockContextProvider({ name: "PlanewaveCutoffDataManager", domain: "test" });
+            nonEditedProvider.isEdited = false;
+            nonEditedProvider.yieldData = () => ({ data: { value: 2 } });
+
+            template.getContextProvidersAsClassInstances = () => [editedProvider, nonEditedProvider];
+            const result = template.getDataFromProvidersForPersistentContext();
+            expect(result).to.deep.equal({ data: { value: 1 } });
+        });
     });
 
     describe("templateStaticMixin properties", () => {
