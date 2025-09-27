@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const application_flavors_js_1 = require("@exabyte-io/application-flavors.js");
 const object_1 = require("@mat3ra/code/dist/js/utils/object");
+const standata_1 = require("@mat3ra/standata");
 const application_1 = __importDefault(require("./application"));
 const executable_1 = __importDefault(require("./executable"));
 const flavor_1 = __importDefault(require("./flavor"));
@@ -15,7 +15,7 @@ class ApplicationRegistry {
         return new application_1.default({ ...staticConfig, name, version, build });
     }
     static getUniqueAvailableApplicationNames() {
-        return application_flavors_js_1.allApplications;
+        return new standata_1.ApplicationStandata().getAllApplicationNames();
     }
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
@@ -30,8 +30,9 @@ class ApplicationRegistry {
         }
         const applicationsTree = {};
         const applicationsArray = [];
-        application_flavors_js_1.allApplications.forEach((appName) => {
-            const { versions, defaultVersion, ...appData } = (0, application_flavors_js_1.getAppData)(appName);
+        const allApplications = new standata_1.ApplicationStandata().getAllApplicationNames();
+        allApplications.forEach((appName) => {
+            const { versions, defaultVersion, ...appData } = new standata_1.ApplicationStandata().getAppDataForApplication(appName);
             const appTreeItem = { defaultVersion };
             versions.forEach((versionInfo) => {
                 const { version, build = "Default" } = versionInfo;
@@ -44,6 +45,9 @@ class ApplicationRegistry {
                     build,
                     ...versionInfo,
                 };
+                if (versionInfo.isDefault) {
+                    appVersion.Default = applicationConfig;
+                }
                 appVersion[build] = applicationConfig;
                 applicationsArray.push(applicationConfig);
             });
@@ -79,7 +83,7 @@ class ApplicationRegistry {
         return (_a = appVersion[build]) !== null && _a !== void 0 ? _a : null;
     }
     static getExecutables({ name, version }) {
-        const tree = (0, application_flavors_js_1.getAppTree)(name);
+        const tree = new standata_1.ApplicationStandata().getAppTreeForApplication(name);
         return Object.keys(tree)
             .filter((key) => {
             const executable = tree[key];
@@ -90,7 +94,7 @@ class ApplicationRegistry {
             .map((key) => new executable_1.default({ ...tree[key], name: key }));
     }
     static getExecutableByName(appName, execName) {
-        const appTree = (0, application_flavors_js_1.getAppTree)(appName);
+        const appTree = new standata_1.ApplicationStandata().getAppTreeForApplication(appName);
         Object.entries(appTree).forEach(([name, exec]) => {
             exec.name = name;
         });
@@ -124,9 +128,7 @@ class ApplicationRegistry {
         const execName = flavor.prop("executableName", "");
         return flavor.input.map((input) => {
             const inputName = input.templateName || input.name;
-            const filtered = application_flavors_js_1.allTemplates.filter((temp) => temp.applicationName === appName &&
-                temp.executableName === execName &&
-                temp.name === inputName);
+            const filtered = new standata_1.ApplicationStandata().getTemplatesByName(appName, execName, inputName);
             if (filtered.length !== 1) {
                 console.log(`found ${filtered.length} templates for app=${appName} exec=${execName} name=${inputName} expected 1`);
             }

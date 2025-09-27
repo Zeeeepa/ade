@@ -79,7 +79,8 @@ describe("ApplicationRegistry", () => {
 
             expect(names).to.be.an("array");
             expect(names).to.include("espresso");
-            expect(names).to.include("vasp");
+            // TODO: uncomment when all applications added to Standata
+            // expect(names).to.include("vasp");
             expect(names.length).to.be.greaterThan(0);
         });
     });
@@ -140,19 +141,18 @@ describe("ApplicationRegistry", () => {
         it("should return application config with custom build", () => {
             const config = ApplicationRegistry.getApplicationConfig({
                 name: "espresso",
-                build: "Intel",
+                build: "GNU",
                 version: "6.3",
             });
 
             expect(config).to.not.be.null;
             expect(config).to.have.property("name", "espresso");
-            expect(config).to.have.property("build", "Intel");
+            expect(config).to.have.property("build", "GNU");
         });
 
         it("should throw error for non-existent application", () => {
             expect(() => {
                 ApplicationRegistry.getApplicationConfig({
-                    // @ts-expect-error - we want to test the error case
                     name: "nonexistent",
                 });
             }).to.throw("Application nonexistent not found");
@@ -425,9 +425,8 @@ describe("ApplicationRegistry", () => {
 
         it("should throw error for non-existent application", () => {
             expect(() => {
-                // @ts-expect-error - we want to test the error case
                 ApplicationRegistry.getAllFlavorsForApplication("nonexistent");
-            }).to.throw("nonexistent is not a known application with a tree.");
+            }).to.throw("nonexistent is not a known application with executable tree.");
         });
     });
 

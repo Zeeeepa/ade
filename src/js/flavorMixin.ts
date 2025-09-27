@@ -45,6 +45,16 @@ export function flavorMixin(item: Base) {
         get supportedApplicationVersions() {
             return this.prop("supportedApplicationVersions");
         },
+
+        getInputAsRenderedTemplates(context: Record<string, unknown>) {
+            const input = this.input;
+            return input.map((template) => {
+                if (template && typeof template === "object" && "getRenderedJSON" in template) {
+                    return (template as any).getRenderedJSON(context);
+                }
+                return template;
+            });
+        },
     };
 
     Object.defineProperties(item, Object.getOwnPropertyDescriptors(properties));

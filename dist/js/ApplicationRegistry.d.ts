@@ -1,4 +1,3 @@
-import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
 import Application from "./application";
 import Executable from "./executable";
@@ -12,22 +11,22 @@ type ApplicationTreeItem = {
     [version: string]: ApplicationVersion | string;
 };
 export type CreateApplicationConfig = {
-    name: ApplicationName;
+    name: string;
     version?: string | null;
     build?: string;
 };
-type ApplicationTree = Partial<Record<ApplicationName, ApplicationTreeItem>>;
+type ApplicationTree = Partial<Record<string, ApplicationTreeItem>>;
 export default class ApplicationRegistry {
     static applicationsTree?: ApplicationTree;
     static applicationsArray?: ApplicationSchemaBase[];
     static createApplication({ name, version, build }: CreateApplicationConfig): Application;
-    static getUniqueAvailableApplicationNames(): ApplicationName[];
+    static getUniqueAvailableApplicationNames(): string[];
     /**
      * @summary Return all applications as both a nested object of Applications and an array of config objects
      * @returns containing applications and applicationConfigs
      */
     static getAllApplications(): {
-        applicationsTree: Partial<Record<ApplicationName, ApplicationTreeItem>>;
+        applicationsTree: Partial<Record<string, ApplicationTreeItem>>;
         applicationsArray: ApplicationSchemaBase[];
     };
     /**
@@ -39,11 +38,11 @@ export default class ApplicationRegistry {
      */
     static getApplicationConfig({ name, version, build, }: CreateApplicationConfig): ApplicationSchemaBase | null;
     static getExecutables({ name, version }: {
-        name: ApplicationName;
+        name: string;
         version?: string;
     }): Executable[];
-    static getExecutableByName(appName: ApplicationName, execName?: string): Executable;
-    static getExecutableByConfig(appName: ApplicationName, config?: {
+    static getExecutableByName(appName: string, execName?: string): Executable;
+    static getExecutableByConfig(appName: string, config?: {
         name: string;
     }): Executable;
     static getExecutableFlavors(executable: Executable): Flavor[];
@@ -53,6 +52,6 @@ export default class ApplicationRegistry {
     }): Flavor | undefined;
     static getInputAsTemplates(flavor: Flavor): Template[];
     static getInputAsRenderedTemplates(flavor: Flavor, context: Record<string, unknown>): import("@mat3ra/esse/dist/js/esse/types").AnyObject[];
-    static getAllFlavorsForApplication(appName: ApplicationName, version?: string): Flavor[];
+    static getAllFlavorsForApplication(appName: string, version?: string): Flavor[];
 }
 export {};
