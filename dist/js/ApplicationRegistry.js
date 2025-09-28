@@ -35,20 +35,27 @@ class ApplicationRegistry {
             const { versions, defaultVersion, ...appData } = new standata_1.ApplicationStandata().getAppDataForApplication(appName);
             const appTreeItem = { defaultVersion };
             versions.forEach((versionInfo) => {
-                const { version, build = "Default" } = versionInfo;
+                const { version, build } = versionInfo;
+                let buildToUse = build;
+                if (!build) {
+                    buildToUse = standata_1.ApplicationStandata.getDefaultBuildForApplicationAndVersion(appName, version);
+                    versionInfo.build = buildToUse;
+                }
                 const appVersion = version in appTreeItem && typeof appTreeItem[version] === "object"
                     ? appTreeItem[version]
                     : {};
                 appTreeItem[version] = appVersion;
                 const applicationConfig = {
                     ...appData,
-                    build,
+                    build: buildToUse,
                     ...versionInfo,
                 };
                 if (versionInfo.isDefault) {
                     appVersion.Default = applicationConfig;
                 }
-                appVersion[build] = applicationConfig;
+                if (buildToUse) {
+                    appVersion[buildToUse] = applicationConfig;
+                }
                 applicationsArray.push(applicationConfig);
             });
             applicationsTree[appName] = appTreeItem;
@@ -67,12 +74,22 @@ class ApplicationRegistry {
      * @param build  the build to use (optional, defaults to Default)
      * @return an application
      */
-    static getApplicationConfig({ name, version = null, build = "Default", }) {
+    static getApplicationConfig({ name, version = null, build = null }) {
         var _a;
         const { applicationsTree } = this.getAllApplications();
         const app = applicationsTree[name];
         if (!app) {
             throw new Error(`Application ${name} not found`);
+        }
+        let buildToUse = build;
+        if (!build) {
+            try {
+                buildToUse = standata_1.ApplicationStandata.getDefaultBuildForApplicationAndVersion(name, version || app.defaultVersion);
+            }
+            catch (error) {
+                console.warn(`Failed to get default build for ${name} version ${version || app.defaultVersion}: ${error}`);
+                return null;
+            }
         }
         const version_ = version || app.defaultVersion;
         const appVersion = app[version_];
@@ -80,7 +97,11 @@ class ApplicationRegistry {
             console.warn(`Version ${version_} not available for ${name} !`);
             return null;
         }
-        return (_a = appVersion[build]) !== null && _a !== void 0 ? _a : null;
+        if (!buildToUse) {
+            console.warn(`No build specified for ${name} version ${version_}`);
+            return null;
+        }
+        return (_a = appVersion[buildToUse]) !== null && _a !== void 0 ? _a : null;
     }
     static getExecutables({ name, version }) {
         const tree = new standata_1.ApplicationStandata().getAppTreeForApplication(name);
