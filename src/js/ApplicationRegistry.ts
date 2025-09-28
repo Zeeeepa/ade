@@ -86,10 +86,6 @@ export default class ApplicationRegistry {
                     ...versionInfo,
                 };
 
-                if (versionInfo.isDefault) {
-                    appVersion.Default = applicationConfig;
-                }
-
                 if (buildToUse) {
                     appVersion[buildToUse] = applicationConfig;
                 }

@@ -50,9 +50,6 @@ class ApplicationRegistry {
                     build: buildToUse,
                     ...versionInfo,
                 };
-                if (versionInfo.isDefault) {
-                    appVersion.Default = applicationConfig;
-                }
                 if (buildToUse) {
                     appVersion[buildToUse] = applicationConfig;
                 }
