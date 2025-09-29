@@ -30,7 +30,7 @@ export default class ApplicationRegistry {
 
     static applicationsArray?: ApplicationSchemaBase[];
 
-    static createApplication({ name, version = null, build = "Default" }: CreateApplicationConfig) {
+    static createApplication({ name, version = null, build = null }: CreateApplicationConfig) {
         const staticConfig = ApplicationRegistry.getApplicationConfig({ name, version, build });
         return new Application({ ...staticConfig, name, version, build });
     }

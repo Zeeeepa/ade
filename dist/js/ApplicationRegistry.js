@@ -10,7 +10,7 @@ const executable_1 = __importDefault(require("./executable"));
 const flavor_1 = __importDefault(require("./flavor"));
 const template_1 = __importDefault(require("./template"));
 class ApplicationRegistry {
-    static createApplication({ name, version = null, build = "Default" }) {
+    static createApplication({ name, version = null, build = null }) {
         const staticConfig = ApplicationRegistry.getApplicationConfig({ name, version, build });
         return new application_1.default({ ...staticConfig, name, version, build });
     }
