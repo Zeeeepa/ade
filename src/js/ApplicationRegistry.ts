@@ -32,7 +32,12 @@ export default class ApplicationRegistry {
 
     static createApplication({ name, version = null, build = null }: CreateApplicationConfig) {
         const staticConfig = ApplicationRegistry.getApplicationConfig({ name, version, build });
-        return new Application({ ...staticConfig, name, version, build });
+        return new Application({
+            ...staticConfig,
+            name,
+            ...(version && { version }),
+            ...(build && { build }),
+        });
     }
 
     static getUniqueAvailableApplicationNames() {

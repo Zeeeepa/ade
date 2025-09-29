@@ -12,7 +12,12 @@ const template_1 = __importDefault(require("./template"));
 class ApplicationRegistry {
     static createApplication({ name, version = null, build = null }) {
         const staticConfig = ApplicationRegistry.getApplicationConfig({ name, version, build });
-        return new application_1.default({ ...staticConfig, name, version, build });
+        return new application_1.default({
+            ...staticConfig,
+            name,
+            ...(version && { version }),
+            ...(build && { build }),
+        });
     }
     static getUniqueAvailableApplicationNames() {
         return new standata_1.ApplicationStandata().getAllApplicationNames();
