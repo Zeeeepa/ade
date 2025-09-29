@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.applicationMixin = applicationMixin;
 exports.applicationStaticMixin = applicationStaticMixin;
 const JSONSchemasInterface_1 = __importDefault(require("@mat3ra/esse/dist/js/esse/JSONSchemasInterface"));
+const standata_1 = require("@mat3ra/standata");
 function applicationMixin(item) {
     // @ts-expect-error
     const properties = {
@@ -37,12 +38,14 @@ function applicationMixin(item) {
 function applicationStaticMixin(Application) {
     const properties = {
         get defaultConfig() {
+            const defaultConfigStandata = new standata_1.ApplicationStandata().getDefaultConfigByNameAndVersion("espresso", "6.3");
+            // TODO: ApplicationStandata should just output this whole object
             return {
-                name: "espresso",
-                shortName: "qe",
-                version: "6.3",
-                summary: "Quantum Espresso",
-                build: "Default",
+                name: defaultConfigStandata.name,
+                shortName: defaultConfigStandata.shortName,
+                version: defaultConfigStandata.version,
+                summary: defaultConfigStandata.summary,
+                build: defaultConfigStandata.build,
             };
         },
         get jsonSchema() {

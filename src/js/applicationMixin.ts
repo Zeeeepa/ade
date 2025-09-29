@@ -4,6 +4,7 @@ import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/Nam
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import JSONSchemasInterface from "@mat3ra/esse/dist/js/esse/JSONSchemasInterface";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
+import { ApplicationStandata } from "@mat3ra/standata";
 
 import Executable from "./executable";
 
@@ -76,12 +77,15 @@ export function applicationMixin(item: Base) {
 export function applicationStaticMixin<T extends BaseConstructor>(Application: T) {
     const properties: ApplicationStaticMixin = {
         get defaultConfig() {
+            const defaultConfigStandata: any =
+                new ApplicationStandata().getDefaultConfigByNameAndVersion("espresso", "6.3");
+            // TODO: ApplicationStandata should just output this whole object
             return {
-                name: "espresso",
-                shortName: "qe",
-                version: "6.3",
-                summary: "Quantum Espresso",
-                build: "Default",
+                name: defaultConfigStandata.name,
+                shortName: defaultConfigStandata.shortName,
+                version: defaultConfigStandata.version,
+                summary: defaultConfigStandata.summary,
+                build: defaultConfigStandata.build,
             };
         },
         get jsonSchema() {
