@@ -74,8 +74,7 @@
         "@mat3ra/utils": "*",
         "@mat3ra/code": "*",
         "@mat3ra/esse": "*",
-        "@mat3ra/made": "*",
-        "@mat3ra/standata": "*"
+        "@mat3ra/made": "*"
     },
     "engines": {
         "node": ">=20.0.0"
