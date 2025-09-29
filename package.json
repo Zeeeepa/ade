@@ -36,7 +36,7 @@
         "lodash": "^4.17.21",
         "nunjucks": "^3.2.4",
         "react-jsonschema-form": "^1.8.1",
-        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#6016bf1d7c34d784889a505879a3cf0d569c24cc"
+        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#7dc964f271b9f16eab31e54799cec3a5efb173ba"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.16.3",
