@@ -43,7 +43,7 @@
         "@mat3ra/code": "2025.8.7-0",
         "@mat3ra/esse": "2025.8.14-0",
         "@mat3ra/made": "2025.7.15-0",
-        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#b8fbbdd089af151d08330c57301adf9359e6d9c3",
+        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#5204a507cf7ad97b0e75fe9c353f1c3790ec7383",
         "@mat3ra/tsconfig": "2024.6.3-0",
         "@types/nunjucks": "^3.2.6",
         "@typescript-eslint/eslint-plugin": "^5.9.1",
