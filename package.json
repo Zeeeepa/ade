@@ -35,7 +35,8 @@
         "@types/react-jsonschema-form": "^1.7.13",
         "lodash": "^4.17.21",
         "nunjucks": "^3.2.4",
-        "react-jsonschema-form": "^1.8.1"
+        "react-jsonschema-form": "^1.8.1",
+        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#6016bf1d7c34d784889a505879a3cf0d569c24cc"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.16.3",
@@ -43,7 +44,6 @@
         "@mat3ra/code": "2025.8.7-0",
         "@mat3ra/esse": "2025.8.14-0",
         "@mat3ra/made": "2025.7.15-0",
-        "@mat3ra/standata": "git+https://github.com/Exabyte-io/standata.git#6016bf1d7c34d784889a505879a3cf0d569c24cc",
         "@mat3ra/tsconfig": "2024.6.3-0",
         "@types/nunjucks": "^3.2.6",
         "@typescript-eslint/eslint-plugin": "^5.9.1",

@@ -73,9 +73,7 @@ export function applicationMixin(item: Base) {
 export function applicationStaticMixin<T extends BaseConstructor>(Application: T) {
     const properties: ApplicationStaticMixin = {
         get defaultConfig() {
-            const cfg = new ApplicationStandata().getDefaultConfig() as Record<string, any>;
-            const { name, shortName, version, summary, build } = cfg;
-            return { name, shortName, version, summary, build } as DefaultApplicationConfig;
+            return new ApplicationStandata().getDefaultConfig();
         },
         get jsonSchema() {
             return JSONSchemasInterface.getSchemaById(
