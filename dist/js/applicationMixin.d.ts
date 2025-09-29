@@ -13,9 +13,9 @@ export type ApplicationMixin = Pick<ApplicationSchemaBase, "summary" | "version"
     name: Required<ApplicationSchemaBase>["name"];
     isUsingMaterial: boolean;
 };
-export type DefaultConfigType = Pick<ApplicationSchemaBase, "name" | "shortName" | "version" | "summary" | "build">;
+export type DefaultApplicationConfig = Pick<ApplicationSchemaBase, "name" | "shortName" | "version" | "summary" | "build">;
 export type ApplicationStaticMixin = {
-    defaultConfig: DefaultConfigType;
+    defaultConfig: DefaultApplicationConfig;
     jsonSchema: ApplicationSchemaBase;
 };
 export declare function applicationMixin(item: Base): void;

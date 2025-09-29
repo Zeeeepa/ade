@@ -24,12 +24,13 @@ export type ApplicationMixin = Pick<
     isUsingMaterial: boolean;
 };
 
-export type DefaultConfigType = Pick<
+export type DefaultApplicationConfig = Pick<
     ApplicationSchemaBase,
     "name" | "shortName" | "version" | "summary" | "build"
 >;
+
 export type ApplicationStaticMixin = {
-    defaultConfig: DefaultConfigType;
+    defaultConfig: DefaultApplicationConfig;
     jsonSchema: ApplicationSchemaBase;
 };
 
@@ -72,7 +73,9 @@ export function applicationMixin(item: Base) {
 export function applicationStaticMixin<T extends BaseConstructor>(Application: T) {
     const properties: ApplicationStaticMixin = {
         get defaultConfig() {
-            return new ApplicationStandata().getDefaultConfig() as ApplicationSchemaBase;
+            const cfg = new ApplicationStandata().getDefaultConfig() as Record<string, any>;
+            const { name, shortName, version, summary, build } = cfg;
+            return { name, shortName, version, summary, build } as DefaultApplicationConfig;
         },
         get jsonSchema() {
             return JSONSchemasInterface.getSchemaById(

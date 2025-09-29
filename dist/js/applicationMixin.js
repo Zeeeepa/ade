@@ -38,7 +38,9 @@ function applicationMixin(item) {
 function applicationStaticMixin(Application) {
     const properties = {
         get defaultConfig() {
-            return new standata_1.ApplicationStandata().getDefaultConfig();
+            const cfg = new standata_1.ApplicationStandata().getDefaultConfig();
+            const { name, shortName, version, summary, build } = cfg;
+            return { name, shortName, version, summary, build };
         },
         get jsonSchema() {
             return JSONSchemasInterface_1.default.getSchemaById("software/application");
