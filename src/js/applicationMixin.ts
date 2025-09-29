@@ -16,25 +16,20 @@ export type BaseConstructor = Constructor<Base> & {
 
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
 
-export type ApplicationMixin = {
-    summary: string | undefined;
-    version: string;
-    build: string | undefined;
-    shortName: string;
-    name: string;
-    hasAdvancedComputeOptions: boolean;
-    isLicensed: boolean;
+export type ApplicationMixin = Pick<
+    ApplicationSchemaBase,
+    "summary" | "version" | "build" | "shortName" | "hasAdvancedComputeOptions" | "isLicensed"
+> & {
+    name: Required<ApplicationSchemaBase>["name"];
     isUsingMaterial: boolean;
 };
 
+export type DefaultConfigType = Pick<
+    ApplicationSchemaBase,
+    "name" | "shortName" | "version" | "summary" | "build"
+>;
 export type ApplicationStaticMixin = {
-    defaultConfig: {
-        name: string;
-        shortName: string;
-        version: string;
-        summary: string;
-        build: string;
-    };
+    defaultConfig: DefaultConfigType;
     jsonSchema: ApplicationSchemaBase;
 };
 
@@ -77,16 +72,7 @@ export function applicationMixin(item: Base) {
 export function applicationStaticMixin<T extends BaseConstructor>(Application: T) {
     const properties: ApplicationStaticMixin = {
         get defaultConfig() {
-            const defaultConfigStandata: any =
-                new ApplicationStandata().getDefaultConfigByNameAndVersion("espresso", "6.3");
-            // TODO: ApplicationStandata should just output this whole object
-            return {
-                name: defaultConfigStandata.name,
-                shortName: defaultConfigStandata.shortName,
-                version: defaultConfigStandata.version,
-                summary: defaultConfigStandata.summary,
-                build: defaultConfigStandata.build,
-            };
+            return new ApplicationStandata().getDefaultConfig() as ApplicationSchemaBase;
         },
         get jsonSchema() {
             return JSONSchemasInterface.getSchemaById(

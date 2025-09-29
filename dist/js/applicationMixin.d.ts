@@ -9,24 +9,13 @@ export type BaseConstructor = Constructor<Base> & {
     constructCustomExecutable?: (config: object) => Executable;
 };
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
-export type ApplicationMixin = {
-    summary: string | undefined;
-    version: string;
-    build: string | undefined;
-    shortName: string;
-    name: string;
-    hasAdvancedComputeOptions: boolean;
-    isLicensed: boolean;
+export type ApplicationMixin = Pick<ApplicationSchemaBase, "summary" | "version" | "build" | "shortName" | "hasAdvancedComputeOptions" | "isLicensed"> & {
+    name: Required<ApplicationSchemaBase>["name"];
     isUsingMaterial: boolean;
 };
+export type DefaultConfigType = Pick<ApplicationSchemaBase, "name" | "shortName" | "version" | "summary" | "build">;
 export type ApplicationStaticMixin = {
-    defaultConfig: {
-        name: string;
-        shortName: string;
-        version: string;
-        summary: string;
-        build: string;
-    };
+    defaultConfig: DefaultConfigType;
     jsonSchema: ApplicationSchemaBase;
 };
 export declare function applicationMixin(item: Base): void;

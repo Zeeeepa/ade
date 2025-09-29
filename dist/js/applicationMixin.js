@@ -38,15 +38,7 @@ function applicationMixin(item) {
 function applicationStaticMixin(Application) {
     const properties = {
         get defaultConfig() {
-            const defaultConfigStandata = new standata_1.ApplicationStandata().getDefaultConfigByNameAndVersion("espresso", "6.3");
-            // TODO: ApplicationStandata should just output this whole object
-            return {
-                name: defaultConfigStandata.name,
-                shortName: defaultConfigStandata.shortName,
-                version: defaultConfigStandata.version,
-                summary: defaultConfigStandata.summary,
-                build: defaultConfigStandata.build,
-            };
+            return new standata_1.ApplicationStandata().getDefaultConfig();
         },
         get jsonSchema() {
             return JSONSchemasInterface_1.default.getSchemaById("software/application");
