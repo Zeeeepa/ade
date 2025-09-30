@@ -4,6 +4,7 @@ import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/Nam
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import JSONSchemasInterface from "@mat3ra/esse/dist/js/esse/JSONSchemasInterface";
 import type { ApplicationSchemaBase } from "@mat3ra/esse/dist/js/types";
+import { ApplicationStandata } from "@mat3ra/standata";
 
 import Executable from "./executable";
 
@@ -15,25 +16,21 @@ export type BaseConstructor = Constructor<Base> & {
 
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
 
-export type ApplicationMixin = {
-    summary: string | undefined;
-    version: string;
-    build: string | undefined;
-    shortName: string;
-    name: string;
-    hasAdvancedComputeOptions: boolean;
-    isLicensed: boolean;
+export type ApplicationMixin = Pick<
+    ApplicationSchemaBase,
+    "summary" | "version" | "build" | "shortName" | "hasAdvancedComputeOptions" | "isLicensed"
+> & {
+    name: Required<ApplicationSchemaBase>["name"];
     isUsingMaterial: boolean;
 };
 
+export type DefaultApplicationConfig = Pick<
+    ApplicationSchemaBase,
+    "name" | "shortName" | "version" | "summary" | "build"
+>;
+
 export type ApplicationStaticMixin = {
-    defaultConfig: {
-        name: string;
-        shortName: string;
-        version: string;
-        summary: string;
-        build: string;
-    };
+    defaultConfig: DefaultApplicationConfig;
     jsonSchema: ApplicationSchemaBase;
 };
 
@@ -76,13 +73,7 @@ export function applicationMixin(item: Base) {
 export function applicationStaticMixin<T extends BaseConstructor>(Application: T) {
     const properties: ApplicationStaticMixin = {
         get defaultConfig() {
-            return {
-                name: "espresso",
-                shortName: "qe",
-                version: "6.3",
-                summary: "Quantum Espresso",
-                build: "Default",
-            };
+            return new ApplicationStandata().getDefaultConfig();
         },
         get jsonSchema() {
             return JSONSchemasInterface.getSchemaById(

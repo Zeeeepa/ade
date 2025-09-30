@@ -19,7 +19,7 @@ type ApplicationTreeItem = {
 export type CreateApplicationConfig = {
     name: string;
     version?: string | null;
-    build?: string;
+    build?: string | null;
 };
 
 type ApplicationTree = Partial<Record<string, ApplicationTreeItem>>;
@@ -30,9 +30,14 @@ export default class ApplicationRegistry {
 
     static applicationsArray?: ApplicationSchemaBase[];
 
-    static createApplication({ name, version = null, build = "Default" }: CreateApplicationConfig) {
+    static createApplication({ name, version = null, build = null }: CreateApplicationConfig) {
         const staticConfig = ApplicationRegistry.getApplicationConfig({ name, version, build });
-        return new Application({ ...staticConfig, name, version, build });
+        return new Application({
+            ...staticConfig,
+            name,
+            ...(version && { version }),
+            ...(build && { build }),
+        });
     }
 
     static getUniqueAvailableApplicationNames() {
@@ -62,7 +67,16 @@ export default class ApplicationRegistry {
             const appTreeItem: ApplicationTreeItem = { defaultVersion };
 
             versions.forEach((versionInfo) => {
-                const { version, build = "Default" } = versionInfo;
+                const { version, build } = versionInfo;
+
+                let buildToUse = build;
+                if (!build) {
+                    buildToUse = ApplicationStandata.getDefaultBuildForApplicationAndVersion(
+                        appName,
+                        version,
+                    );
+                    versionInfo.build = buildToUse;
+                }
 
                 const appVersion =
                     version in appTreeItem && typeof appTreeItem[version] === "object"
@@ -73,15 +87,13 @@ export default class ApplicationRegistry {
 
                 const applicationConfig: ApplicationSchemaBase = {
                     ...appData,
-                    build,
+                    build: buildToUse,
                     ...versionInfo,
                 };
 
-                if (versionInfo.isDefault) {
-                    appVersion.Default = applicationConfig;
+                if (buildToUse) {
+                    appVersion[buildToUse] = applicationConfig;
                 }
-
-                appVersion[build] = applicationConfig;
                 applicationsArray.push(applicationConfig);
             });
 
@@ -104,16 +116,29 @@ export default class ApplicationRegistry {
      * @param build  the build to use (optional, defaults to Default)
      * @return an application
      */
-    static getApplicationConfig({
-        name,
-        version = null,
-        build = "Default",
-    }: CreateApplicationConfig) {
+    static getApplicationConfig({ name, version = null, build = null }: CreateApplicationConfig) {
         const { applicationsTree } = this.getAllApplications();
         const app = applicationsTree[name];
 
         if (!app) {
             throw new Error(`Application ${name} not found`);
+        }
+
+        let buildToUse: string | null = build;
+        if (!build) {
+            try {
+                buildToUse = ApplicationStandata.getDefaultBuildForApplicationAndVersion(
+                    name,
+                    version || app.defaultVersion,
+                );
+            } catch (error) {
+                console.warn(
+                    `Failed to get default build for ${name} version ${
+                        version || app.defaultVersion
+                    }: ${error}`,
+                );
+                return null;
+            }
         }
 
         const version_ = version || app.defaultVersion;
@@ -124,7 +149,12 @@ export default class ApplicationRegistry {
             return null;
         }
 
-        return appVersion[build] ?? null;
+        if (!buildToUse) {
+            console.warn(`No build specified for ${name} version ${version_}`);
+            return null;
+        }
+
+        return appVersion[buildToUse] ?? null;
     }
 
     static getExecutables({ name, version }: { name: string; version?: string }) {

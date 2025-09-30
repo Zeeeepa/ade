@@ -13,7 +13,7 @@ type ApplicationTreeItem = {
 export type CreateApplicationConfig = {
     name: string;
     version?: string | null;
-    build?: string;
+    build?: string | null;
 };
 type ApplicationTree = Partial<Record<string, ApplicationTreeItem>>;
 export default class ApplicationRegistry {
@@ -36,7 +36,7 @@ export default class ApplicationRegistry {
      * @param build  the build to use (optional, defaults to Default)
      * @return an application
      */
-    static getApplicationConfig({ name, version, build, }: CreateApplicationConfig): ApplicationSchemaBase | null;
+    static getApplicationConfig({ name, version, build }: CreateApplicationConfig): ApplicationSchemaBase | null;
     static getExecutables({ name, version }: {
         name: string;
         version?: string;

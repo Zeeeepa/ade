@@ -114,8 +114,8 @@ describe("Application", () => {
             expect(config).to.have.property("name", "espresso");
             expect(config).to.have.property("shortName", "qe");
             expect(config).to.have.property("version", "6.3");
-            expect(config).to.have.property("summary", "Quantum Espresso");
-            expect(config).to.have.property("build", "Default");
+            expect(config).to.have.property("summary", "Quantum ESPRESSO");
+            expect(config).to.have.property("build", "GNU");
         });
 
         it("should return the complete defaultConfig object", () => {
@@ -123,8 +123,8 @@ describe("Application", () => {
                 name: "espresso",
                 shortName: "qe",
                 version: "6.3",
-                summary: "Quantum Espresso",
-                build: "Default",
+                summary: "Quantum ESPRESSO",
+                build: "GNU",
             });
         });
     });
