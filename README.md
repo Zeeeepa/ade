@@ -1,7 +1,7 @@
-[![npm version](https://badge.fury.io/js/%40exabyte-io%2Fade.js.svg)](https://badge.fury.io/js/%40exabyte-io%2Fade.js)
+[![npm version](https://badge.fury.io/js/%40mat3ra%2Fade.js.svg)](https://badge.fury.io/js/%40mat3ra%2Fade.js)
 [![License: Apache](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-# ade.js
+# @mat3ra/ade
 
 ade.js houses entity definitions for use in the Mat3ra platform.
 
@@ -11,13 +11,13 @@ ade.js houses entity definitions for use in the Mat3ra platform.
 For usage within a javascript project:
 
 ```bash
-npm install @exabyte-io/ade.js
+npm install @mat3ra/ade.js
 ```
 
 For development:
 
 ```bash
-git clone https://github.com/Exabyte-io/ade.js.git
+git clone https://github.com/Exabyte-io/ade.git
 ```
 
 
@@ -76,7 +76,7 @@ The project uses GitHub Actions to automatically generate and display coverage r
    - Available for 30 days for main branch, 7 days for PRs
 
 3. **GitHub Pages** (Optional): Coverage reports are published to GitHub Pages for easy browser viewing
-   - Available at: `https://exabyte-io.github.io/ade.js/`
+   - Available at: `https://exabyte-io.github.io/ade/`
    - Updated on every push to main branch
 
 ### Coverage Thresholds
@@ -101,13 +101,6 @@ ecosystem, where `ADe` houses entity definitions for:
 - `Template` - a jinja template for an application input file
 
 The relevant data parameterizing these entities is housed in
-the [Application Flavors](https://github.com/Exabyte-io/exabyte-application-flavors)
+the [Application Flavors](https://github.com/Exabyte-io/standata)
 repository. This includes the supported applications, executables, flavors,
 and defined templates.
-
-Templates themselves are organized by application in a top-level `assets`
-directory in `application-flavors` and the API for loading and working with templates can be found in
-each application's `assets.js` module.
-At build time, all templates are loaded and compiled into a single monolithic
-JS file using `build_templates.js` so that it can be used in the client as well as in NodeJS.
-This is how templates are consumed from `applicaton-flavors` in `ADe`.
