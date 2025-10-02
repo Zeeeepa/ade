@@ -1,14 +1,22 @@
 [![npm version](https://badge.fury.io/js/%40mat3ra%2Fade.svg)](https://badge.fury.io/js/%40mat3ra%2Fade)
 [![License: Apache](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-# @mat3ra/ade
+# ade
 
-ADe (Application DEfinitions) houses the applications-related definitions.
+Application DEfinitions package. Houses the definitions for:
+
+- `Application` - uniquely determined by `name, [version], [build]`
+- `Executable` - defined for a given application and accessible from application by name
+- `Flavor` - defined for a given executable and accessible from executable by name
+- `Template` - a jinja template for an application input file
+
+The relevant data parameterizing supported entities is housed in the
+[Standata](https://github.com/Exabyte-io/standata) repository.
 
 
-### Installation
+## Installation
 
-For usage within a javascript project:
+For usage within a JavaScript project:
 
 ```bash
 npm install @mat3ra/ade
@@ -20,8 +28,7 @@ For development:
 git clone https://github.com/Exabyte-io/ade.git
 ```
 
-
-### Contribution
+## Contributions
 
 This repository is an [open-source](LICENSE.md) work-in-progress and we welcome contributions.
 
@@ -55,7 +62,7 @@ npm run test:coverage:check
 npm run test:coverage:html
 ```
 
-## Code Coverage
+## Development: Code/Test Coverage
 
 This project includes comprehensive code coverage reporting with multiple viewing options:
 
@@ -88,19 +95,3 @@ The project enforces minimum coverage thresholds:
 
 ### External Coverage Services
 - **Codecov**: Coverage data is automatically uploaded to Codecov for historical tracking and trend analysis
-
-ADe
-===
-
-The`ADe` package sits just below the `WoDe` package in the Mat3ra workflow
-ecosystem, where `ADe` houses entity definitions for:
-
-- `Application` - uniquely determined by `name, [version], [build]`
-- `Executable` - defined for a given application and accessible from application by name
-- `Flavor` - defined for a given executable and accessible from executable by name
-- `Template` - a jinja template for an application input file
-
-The relevant data parameterizing these entities is housed in
-the [Application Flavors](https://github.com/Exabyte-io/standata)
-repository. This includes the supported applications, executables, flavors,
-and defined templates.
