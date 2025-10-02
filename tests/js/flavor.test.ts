@@ -82,6 +82,18 @@ describe("Flavor", () => {
             flavor.setProp("supportedApplicationVersions", ["6.3", "7.0"]);
             expect(flavor.supportedApplicationVersions).to.deep.equal(["6.3", "7.0"]);
         });
+        
+        // Added with LLM to help with coverage
+        it("should handle getInputAsRenderedTemplates with different template types", () => {
+            const mockTemplate = { getRenderedJSON: () => ({ rendered: true }) };
+            const simpleTemplate = { name: "simple" };
+            flavor.setProp("input", [mockTemplate, simpleTemplate]);
+
+            const result = flavor.getInputAsRenderedTemplates({});
+            expect(result).to.have.length(2);
+            expect(result[0]).to.deep.equal({ rendered: true });
+            expect(result[1]).to.deep.equal({ name: "simple" });
+        });
     });
 
     describe("flavorStaticMixin", () => {

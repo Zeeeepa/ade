@@ -28,6 +28,15 @@ function flavorMixin(item) {
         get supportedApplicationVersions() {
             return this.prop("supportedApplicationVersions");
         },
+        getInputAsRenderedTemplates(context) {
+            const input = this.input;
+            return input.map((template) => {
+                if (template && typeof template === "object" && "getRenderedJSON" in template) {
+                    return template.getRenderedJSON(context);
+                }
+                return template;
+            });
+        },
     };
     Object.defineProperties(item, Object.getOwnPropertyDescriptors(properties));
     return properties;

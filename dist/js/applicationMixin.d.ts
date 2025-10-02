@@ -1,4 +1,3 @@
-import { type ApplicationName } from "@exabyte-io/application-flavors.js";
 import type { InMemoryEntity } from "@mat3ra/code/dist/js/entity";
 import type { DefaultableInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/DefaultableMixin";
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
@@ -10,24 +9,13 @@ export type BaseConstructor = Constructor<Base> & {
     constructCustomExecutable?: (config: object) => Executable;
 };
 export type ApplicationConstructor = Constructor<ApplicationMixin> & ApplicationStaticMixin;
-export type ApplicationMixin = {
-    summary: string | undefined;
-    version: string;
-    build: string | undefined;
-    shortName: string;
-    name: ApplicationName;
-    hasAdvancedComputeOptions: boolean;
-    isLicensed: boolean;
+export type ApplicationMixin = Pick<ApplicationSchemaBase, "summary" | "version" | "build" | "shortName" | "hasAdvancedComputeOptions" | "isLicensed"> & {
+    name: Required<ApplicationSchemaBase>["name"];
     isUsingMaterial: boolean;
 };
+export type DefaultApplicationConfig = Pick<ApplicationSchemaBase, "name" | "shortName" | "version" | "summary" | "build">;
 export type ApplicationStaticMixin = {
-    defaultConfig: {
-        name: string;
-        shortName: string;
-        version: string;
-        summary: string;
-        build: string;
-    };
+    defaultConfig: DefaultApplicationConfig;
     jsonSchema: ApplicationSchemaBase;
 };
 export declare function applicationMixin(item: Base): void;

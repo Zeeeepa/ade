@@ -1,5 +1,5 @@
 {
-    "name": "@exabyte-io/ade.js",
+    "name": "@mat3ra/ade",
     "version": "0.0.0",
     "description": "Application DEfinitions",
     "scripts": {
@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Exabyte-io/ade.js.git"
+        "url": "https://github.com/Exabyte-io/ade.git"
     },
     "main": "dist/js/index.js",
     "files": [
@@ -27,10 +27,10 @@
     ],
     "author": "Exabyte Inc.",
     "bugs": {
-        "url": "https://github.com/Exabyte-io/ade.js/issues"
+        "url": "https://github.com/Exabyte-io/ade/issues"
     },
     "license": "Apache-2.0",
-    "homepage": "https://github.com/Exabyte-io/ade.js",
+    "homepage": "https://github.com/Exabyte-io/ade",
     "dependencies": {
         "@types/react-jsonschema-form": "^1.7.13",
         "lodash": "^4.17.21",
@@ -39,11 +39,12 @@
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.16.3",
-        "@exabyte-io/application-flavors.js": "2024.9.8-1",
         "@exabyte-io/eslint-config": "2025.5.13-0",
+        "@mat3ra/utils": "2025.9.20-0",
         "@mat3ra/code": "2025.8.7-0",
         "@mat3ra/esse": "2025.8.14-0",
         "@mat3ra/made": "2025.7.15-0",
+        "@mat3ra/standata": "2025.10.1-0",
         "@mat3ra/tsconfig": "2024.6.3-0",
         "@types/nunjucks": "^3.2.6",
         "@typescript-eslint/eslint-plugin": "^5.9.1",
@@ -71,11 +72,11 @@
         "typescript": "^5.6.0"
     },
     "peerDependencies": {
-        "@exabyte-io/application-flavors.js": "*",
         "@mat3ra/utils": "*",
         "@mat3ra/code": "*",
         "@mat3ra/esse": "*",
-        "@mat3ra/made": "*"
+        "@mat3ra/made": "*",
+        "@mat3ra/standata": "*"
     },
     "engines": {
         "node": ">=20.0.0"
