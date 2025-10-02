@@ -1,9 +1,9 @@
-[![npm version](https://badge.fury.io/js/%40mat3ra%2Fade.js.svg)](https://badge.fury.io/js/%40mat3ra%2Fade.js)
+[![npm version](https://badge.fury.io/js/%40mat3ra%2Fade.svg)](https://badge.fury.io/js/%40mat3ra%2Fade)
 [![License: Apache](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # @mat3ra/ade
 
-ade.js houses entity definitions for use in the Mat3ra platform.
+ADe (Application DEfinitions) houses the applications-related definitions.
 
 
 ### Installation
@@ -11,7 +11,7 @@ ade.js houses entity definitions for use in the Mat3ra platform.
 For usage within a javascript project:
 
 ```bash
-npm install @mat3ra/ade.js
+npm install @mat3ra/ade
 ```
 
 For development:
