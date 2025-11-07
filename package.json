@@ -8,10 +8,10 @@
         "test:coverage:html": "nyc --reporter=html mocha --recursive --bail tests/js/**/*.ts",
         "test:coverage:check": "nyc --reporter=text --check-coverage mocha --recursive --bail tests/js/**/*.ts",
         "test:coverage:view": "node scripts/view-coverage.js",
-        "lint": "eslint src tests && prettier --write src tests",
-        "lint:fix": "eslint --fix --cache src tests && prettier --write src tests",
+        "lint": "eslint src/js tests/js && prettier --write src/js tests/js",
+        "lint:fix": "eslint --fix --cache src/js tests/js && prettier --write src/js tests/js",
         "transpile": "tsc -p tsconfig-transpile.json",
-        "prettier": "prettier --check src tests",
+        "prettier": "prettier --check src/js tests/js",
         "prepare": "husky install"
     },
     "repository": {
@@ -82,7 +82,7 @@
         "node": ">=20.0.0"
     },
     "lint-staged": {
-        "*.js": "eslint --cache --fix",
-        "*.{js,css}": "prettier --write"
+        "src/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"],
+        "tests/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"]
     }
 }
