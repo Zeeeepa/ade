@@ -1,6 +1,8 @@
-import numpy as np
+"""Application DEfinitions package."""
 
+from mat3ra.ade.application import Application
+from mat3ra.ade.executable import Executable
+from mat3ra.ade.flavor import Flavor, FlavorInput
+from mat3ra.ade.template import ContextProvider, Template
 
-def get_length(vec: np.ndarray) -> float:
-    return float(np.linalg.norm(vec))
-
+__all__ = ["Application", "Executable", "Flavor", "FlavorInput", "Template", "ContextProvider"]
