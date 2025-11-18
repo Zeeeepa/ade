@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allApplications = exports.templateMixin = exports.applicationStaticMixin = exports.applicationMixin = exports.flavorMixin = exports.executableMixin = exports.JSONSchemaFormDataProvider = exports.ContextProvider = exports.ApplicationRegistry = exports.Template = exports.Flavor = exports.Executable = exports.Application = void 0;
+exports.allApplications = exports.templateStaticMixin = exports.templateMixin = exports.applicationStaticMixin = exports.applicationMixin = exports.flavorMixin = exports.executableMixin = exports.JSONSchemaFormDataProvider = exports.ContextProvider = exports.ApplicationRegistry = exports.Template = exports.Flavor = exports.Executable = exports.Application = void 0;
 const application_1 = __importDefault(require("./application"));
 exports.Application = application_1.default;
 const applicationMixin_1 = require("./applicationMixin");
@@ -27,5 +27,6 @@ const template_1 = __importDefault(require("./template"));
 exports.Template = template_1.default;
 const templateMixin_1 = require("./templateMixin");
 Object.defineProperty(exports, "templateMixin", { enumerable: true, get: function () { return templateMixin_1.templateMixin; } });
+Object.defineProperty(exports, "templateStaticMixin", { enumerable: true, get: function () { return templateMixin_1.templateStaticMixin; } });
 const allApplications = ApplicationRegistry_1.default.getUniqueAvailableApplicationNames();
 exports.allApplications = allApplications;

@@ -8,6 +8,6 @@ import { executableMixin } from "./executableMixin";
 import Flavor from "./flavor";
 import { flavorMixin } from "./flavorMixin";
 import Template from "./template";
-import { templateMixin } from "./templateMixin";
+import { templateMixin, templateStaticMixin } from "./templateMixin";
 declare const allApplications: string[];
-export { Application, Executable, Flavor, Template, ApplicationRegistry, ContextProvider, JSONSchemaFormDataProvider, executableMixin, flavorMixin, applicationMixin, applicationStaticMixin, templateMixin, allApplications, };
+export { Application, Executable, Flavor, Template, ApplicationRegistry, ContextProvider, JSONSchemaFormDataProvider, executableMixin, flavorMixin, applicationMixin, applicationStaticMixin, templateMixin, templateStaticMixin, allApplications, };

@@ -8,7 +8,7 @@ import { executableMixin } from "./executableMixin";
 import Flavor from "./flavor";
 import { flavorMixin } from "./flavorMixin";
 import Template from "./template";
-import { templateMixin } from "./templateMixin";
+import { templateMixin, templateStaticMixin } from "./templateMixin";
 
 const allApplications = ApplicationRegistry.getUniqueAvailableApplicationNames();
 
@@ -25,5 +25,6 @@ export {
     applicationMixin,
     applicationStaticMixin,
     templateMixin,
+    templateStaticMixin,
     allApplications,
 };
