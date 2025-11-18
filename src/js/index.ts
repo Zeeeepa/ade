@@ -1,14 +1,16 @@
 import Application from "./application";
-import { ApplicationMixin, applicationMixin } from "./applicationMixin";
+import { applicationMixin } from "./applicationMixin";
 import ApplicationRegistry from "./ApplicationRegistry";
 import ContextProvider from "./context/ContextProvider";
 import JSONSchemaFormDataProvider from "./context/JSONSchemaFormDataProvider";
 import Executable from "./executable";
-import { ExecutableMixin, executableMixin } from "./executableMixin";
+import { executableMixin } from "./executableMixin";
 import Flavor from "./flavor";
-import { FlavorMixin, flavorMixin } from "./flavorMixin";
+import { flavorMixin } from "./flavorMixin";
 import Template from "./template";
-import { TemplateMixin, templateMixin } from "./templateMixin";
+import { templateMixin } from "./templateMixin";
+
+const allApplications = ApplicationRegistry.getUniqueAvailableApplicationNames();
 
 export {
     Application,
@@ -22,5 +24,5 @@ export {
     flavorMixin,
     applicationMixin,
     templateMixin,
+    allApplications,
 };
-export type { FlavorMixin, ExecutableMixin, ApplicationMixin, TemplateMixin };
