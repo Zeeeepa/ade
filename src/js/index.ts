@@ -1,5 +1,5 @@
 import Application from "./application";
-import { applicationMixin } from "./applicationMixin";
+import { applicationMixin, applicationStaticMixin } from "./applicationMixin";
 import ApplicationRegistry from "./ApplicationRegistry";
 import ContextProvider from "./context/ContextProvider";
 import JSONSchemaFormDataProvider from "./context/JSONSchemaFormDataProvider";
@@ -23,6 +23,7 @@ export {
     executableMixin,
     flavorMixin,
     applicationMixin,
+    applicationStaticMixin,
     templateMixin,
     allApplications,
 };
