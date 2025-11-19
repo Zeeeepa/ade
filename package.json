@@ -25,6 +25,16 @@
         ".babelrc",
         "tsconfig.json"
     ],
+    "exports": {
+        ".": {
+            "types": "./dist/js/index.d.ts",
+            "default": "./dist/js/index.js"
+        },
+        "./types": {
+            "types": "./dist/js/types.d.ts",
+            "default": "./dist/js/types.js"
+        }
+    },
     "author": "Exabyte Inc.",
     "bugs": {
         "url": "https://github.com/Exabyte-io/ade/issues"
@@ -82,7 +92,13 @@
         "node": ">=20.0.0"
     },
     "lint-staged": {
-        "src/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"],
-        "tests/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"]
+        "src/js/**/*.{js,ts}": [
+            "eslint --cache --fix",
+            "prettier --write"
+        ],
+        "tests/js/**/*.{js,ts}": [
+            "eslint --cache --fix",
+            "prettier --write"
+        ]
     }
 }
