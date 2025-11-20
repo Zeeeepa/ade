@@ -11,4 +11,4 @@ import Template from "./template";
 import { templateMixin, templateStaticMixin } from "./templateMixin";
 declare const allApplications: string[];
 export { Application, Executable, Flavor, Template, ApplicationRegistry, ContextProvider, JSONSchemaFormDataProvider, executableMixin, flavorMixin, applicationMixin, applicationStaticMixin, templateMixin, templateStaticMixin, allApplications, };
-export * from "./types";
+export type * from "./types";
