@@ -9,7 +9,7 @@
  *             to next one, for example data about material to track when it is changed.
  * @notes   Should hold static data only (see `setData` method), no classes or functions
  */
-import { ContextProviderNameEnum, ContextProviderSchema } from "@mat3ra/esse/dist/js/types";
+import { ContextProviderSchema, Name as ContextProviderNameEnum } from "@mat3ra/esse/dist/js/types";
 import { Utils } from "@mat3ra/utils";
 import lodash from "lodash";
 
@@ -25,10 +25,10 @@ export interface ContextProviderStatic {
     getIsEditedKeyByName: (name: string) => string;
 }
 
-export default class ContextProvider {
+export default class ContextProvider implements ContextProviderSchema {
     config: ContextProviderSchema;
 
-    name: `${ContextProviderNameEnum}`;
+    name: ContextProviderNameEnum;
 
     domain?: string;
 
@@ -39,6 +39,10 @@ export default class ContextProvider {
     extraData?: object;
 
     isEdited?: boolean;
+
+    context?: object;
+
+    [k: string]: unknown;
 
     constructor(config: ContextProviderSchema) {
         this.config = config;
