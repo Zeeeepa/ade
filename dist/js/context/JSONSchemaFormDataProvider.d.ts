@@ -1,9 +1,5 @@
-import { ContextProviderSchema } from "@mat3ra/esse/dist/js/types";
 import type { UiSchema } from "react-jsonschema-form";
-import ContextProvider from "./ContextProvider";
-interface JSONSchemaFormDataProviderConfig extends ContextProviderSchema {
-    isUsingJinjaVariables?: boolean;
-}
+import JSONSchemaDataProvider from "./JSONSchemaDataProvider";
 /**
  * @summary Provides jsonSchema and uiSchema for generating react-jsonschema-form
  *          See https://github.com/mozilla-services/react-jsonschema-form for Form UI.
@@ -14,13 +10,9 @@ interface JSONSchemaFormDataProviderConfig extends ContextProviderSchema {
  *      formData={provider.getData(unit.important)} />
  * ```
  */
-export default class JSONSchemaFormDataProvider extends ContextProvider {
-    isUsingJinjaVariables: boolean;
-    constructor(config: JSONSchemaFormDataProviderConfig);
-    get jsonSchema(): void;
+export default class JSONSchemaFormDataProvider extends JSONSchemaDataProvider {
     get uiSchema(): UiSchema;
     get fields(): {};
     get defaultFieldStyles(): {};
     get uiSchemaStyled(): UiSchema;
 }
-export {};
