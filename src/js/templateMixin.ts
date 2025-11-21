@@ -1,16 +1,17 @@
 import type { InMemoryEntity } from "@mat3ra/code/dist/js/entity";
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
-import { Utils } from "@mat3ra/utils";
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import JSONSchemasInterface from "@mat3ra/esse/dist/js/esse/JSONSchemasInterface";
 import type { AnyObject } from "@mat3ra/esse/dist/js/esse/types";
-import type { TemplateSchema } from "@mat3ra/esse/dist/js/types";
+import type {
+    ContextProviderNameEnum,
+    ContextProviderSchema,
+    TemplateSchema,
+} from "@mat3ra/esse/dist/js/types";
+import { Utils } from "@mat3ra/utils";
 import nunjucks from "nunjucks";
 
-import ContextProvider, {
-    type ContextProviderConfig,
-    type ContextProviderName,
-} from "./context/ContextProvider";
+import ContextProvider from "./context/ContextProvider";
 import ContextProviderRegistryContainer from "./context/ContextProviderRegistryContainer";
 
 export type TemplateBase = InMemoryEntity & NamedInMemoryEntity;
@@ -200,11 +201,11 @@ export function templateMixin(item: TemplateBase) {
 
 export type ContextProviderConfigMapEntry = {
     providerCls: typeof ContextProvider;
-    config: ContextProviderConfig;
+    config: ContextProviderSchema;
 };
 
 export type ContextProviderConfigMap = Partial<
-    Record<ContextProviderName, ContextProviderConfigMapEntry>
+    Record<ContextProviderNameEnum, ContextProviderConfigMapEntry>
 >;
 
 export type TemplateStaticMixin = {

@@ -1,6 +1,7 @@
+import { ContextProviderSchema } from "@mat3ra/esse/dist/js/types";
 import type { UiSchema } from "react-jsonschema-form";
-import ContextProvider, { type ContextProviderConfig } from "./ContextProvider";
-interface JSONSchemaFormDataProviderConfig extends ContextProviderConfig {
+import ContextProvider from "./ContextProvider";
+interface JSONSchemaFormDataProviderConfig extends ContextProviderSchema {
     isUsingJinjaVariables?: boolean;
 }
 /**

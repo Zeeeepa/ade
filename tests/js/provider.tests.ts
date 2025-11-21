@@ -1,9 +1,10 @@
+import { Name as ContextProviderNameEnum } from "@mat3ra/esse/dist/js/types";
 import { expect } from "chai";
 
-import ContextProvider, { ContextProviderName } from "../../src/js/context/ContextProvider";
+import ContextProvider from "../../src/js/context/ContextProvider";
 
 describe("ContextProvider", () => {
-    const minimal = { name: ContextProviderName.KGridFormDataManager };
+    const minimal = { name: ContextProviderNameEnum.KGridFormDataManager };
     const data = { a: "test" };
 
     it("can be created", () => {
