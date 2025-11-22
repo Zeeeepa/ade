@@ -22,5 +22,30 @@ describe("ContextProvider", () => {
         expect(() => provider.defaultData).to.throw("Not implemented.");
     });
 
+    it("should return extraDataKey", () => {
+        const provider = new ContextProvider(minimal);
+        expect(provider.extraDataKey).to.equal(`${provider.name}ExtraData`);
+    });
+
+    it("should return isEditedKey", () => {
+        const provider = new ContextProvider(minimal);
+        expect(provider.isEditedKey).to.include("Edited");
+        expect(provider.isEditedKey).to.include("is");
+    });
+
+    it("should return isUnitContextProvider", () => {
+        const provider = new ContextProvider({ ...minimal, entityName: "unit" });
+        expect(provider.isUnitContextProvider).to.be.true;
+        const nonUnitProvider = new ContextProvider({ ...minimal, entityName: "subworkflow" });
+        expect(nonUnitProvider.isUnitContextProvider).to.be.false;
+    });
+
+    it("should return isSubworkflowContextProvider", () => {
+        const provider = new ContextProvider({ ...minimal, entityName: "subworkflow" });
+        expect(provider.isSubworkflowContextProvider).to.be.true;
+        const nonSubworkflowProvider = new ContextProvider({ ...minimal, entityName: "unit" });
+        expect(nonSubworkflowProvider.isSubworkflowContextProvider).to.be.false;
+    });
+
     // transform, yieldData, yieldDataForRendering
 });

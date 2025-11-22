@@ -338,6 +338,16 @@ describe("Template", () => {
             const result = template.getDataFromProvidersForPersistentContext();
             expect(result).to.deep.equal({ data: { value: 1 } });
         });
+
+        it("should throw error when provider not found", () => {
+            template.setProp("contextProviders", [
+                { name: ContextProviderNameEnum.KGridFormDataManager },
+            ]);
+            Template.contextProviderRegistry = null;
+            expect(() => template.getContextProvidersAsClassInstances()).to.throw(
+                /Provider .* not found/,
+            );
+        });
     });
 
     describe("templateStaticMixin properties", () => {
