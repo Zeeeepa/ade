@@ -52,7 +52,7 @@
         "@exabyte-io/eslint-config": "2025.5.13-0",
         "@mat3ra/utils": "2025.9.20-0",
         "@mat3ra/code": "2025.8.7-0",
-        "@mat3ra/esse": "git+https://github.com/Exabyte-io/esse.git#08ab3880ce5264b5b7ae201df4119b74f88cd9cf",
+        "@mat3ra/esse": "git+https://github.com/Exabyte-io/esse.git#d4e2616f9ae405288d182bbcc136fad5d4eeb4b3",
         "@mat3ra/made": "2025.7.15-0",
         "@mat3ra/standata": "2025.10.1-0",
         "@mat3ra/tsconfig": "2024.6.3-0",
