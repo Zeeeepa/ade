@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable class-methods-use-this */
-const ContextProviderJinja_1 = __importDefault(require("./ContextProviderJinja"));
+const JinjaContextProvider_1 = __importDefault(require("./JinjaContextProvider"));
 /**
  * @summary Provides jsonSchema only.
  */
-class JSONSchemaDataProvider extends ContextProviderJinja_1.default {
+class JSONSchemaDataProvider extends JinjaContextProvider_1.default {
     get jsonSchema() {
         throw new Error("Not implemented.");
     }
