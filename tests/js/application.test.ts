@@ -127,5 +127,11 @@ describe("Application", () => {
                 build: "GNU",
             });
         });
+
+        it("should have jsonSchema property", () => {
+            const schema = Application.jsonSchema;
+            expect(schema).to.exist;
+            expect(schema).to.have.property("$id");
+        });
     });
 });
