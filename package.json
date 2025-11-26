@@ -10,7 +10,7 @@
         "test:coverage:view": "node scripts/view-coverage.js",
         "lint": "eslint src/js tests/js && prettier --write src/js tests/js",
         "lint:fix": "eslint --fix --cache src/js tests/js && prettier --write src/js tests/js",
-        "transpile": "tsc -p tsconfig-transpile.json",
+        "transpile": "tsc -p tsconfig.json",
         "prettier": "prettier --check src/js tests/js",
         "prepare": "husky install"
     },
@@ -25,6 +25,16 @@
         ".babelrc",
         "tsconfig.json"
     ],
+    "exports": {
+        ".": {
+            "types": "./dist/js/index.d.ts",
+            "default": "./dist/js/index.js"
+        },
+        "./types": {
+            "types": "./dist/js/types.d.ts",
+            "default": "./dist/js/types.js"
+        }
+    },
     "author": "Exabyte Inc.",
     "bugs": {
         "url": "https://github.com/Exabyte-io/ade/issues"
@@ -42,7 +52,7 @@
         "@exabyte-io/eslint-config": "2025.5.13-0",
         "@mat3ra/utils": "2025.9.20-0",
         "@mat3ra/code": "2025.8.7-0",
-        "@mat3ra/esse": "2025.8.14-0",
+        "@mat3ra/esse": "2025.11.26-0",
         "@mat3ra/made": "2025.7.15-0",
         "@mat3ra/standata": "2025.10.1-0",
         "@mat3ra/tsconfig": "2024.6.3-0",

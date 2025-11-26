@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+import { Name as ContextProviderNameEnum } from "@mat3ra/esse/dist/js/types";
 import { expect } from "chai";
 import type { ContextProviderConfigMapEntry } from "src/js/templateMixin";
 
@@ -25,14 +26,14 @@ describe("ApplicationRegistry", () => {
 
         const mockConfig: ContextProviderConfigMapEntry = {
             providerCls: MockContextProvider,
-            config: { name: "QGridFormDataManager" },
+            config: { name: ContextProviderNameEnum.QGridFormDataManager },
         };
 
         Template.setContextProvidersConfig({
-            QGridFormDataManager: mockConfig,
-            PlanewaveCutoffDataManager: mockConfig,
-            KGridFormDataManager: mockConfig,
-            QEPWXInputDataManager: mockConfig,
+            [ContextProviderNameEnum.QGridFormDataManager]: mockConfig,
+            [ContextProviderNameEnum.PlanewaveCutoffDataManager]: mockConfig,
+            [ContextProviderNameEnum.KGridFormDataManager]: mockConfig,
+            [ContextProviderNameEnum.QEPWXInputDataManager]: mockConfig,
         });
     });
 
