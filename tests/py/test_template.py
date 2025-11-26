@@ -1,7 +1,27 @@
 """Tests for Template class."""
 
 import pytest
-from mat3ra.ade import ContextProvider, Template
+from mat3ra.ade import (
+    ContextProvider,
+    ContextProviderName,
+    JinjaContextProvider,
+    JSONSchemaDataProvider,
+    JSONSchemaFormDataProvider,
+    Template,
+)
+
+
+class TestContextProviderName:
+    """Test suite for ContextProviderName enum."""
+
+    def test_context_provider_name_enum_values(self):
+        """Test that ContextProviderName enum has expected values."""
+        assert ContextProviderName.PlanewaveCutoffDataManager == "PlanewaveCutoffDataManager"
+        assert ContextProviderName.KGridFormDataManager == "KGridFormDataManager"
+        assert ContextProviderName.QGridFormDataManager == "QGridFormDataManager"
+        assert ContextProviderName.IonDynamicsContextProvider == "IonDynamicsContextProvider"
+        assert ContextProviderName.VASPInputDataManager == "VASPInputDataManager"
+        assert ContextProviderName.NWChemInputDataManager == "NWChemInputDataManager"
 
 
 class TestContextProvider:
@@ -16,6 +36,162 @@ class TestContextProvider:
         """Test that name is required."""
         with pytest.raises(Exception):
             ContextProvider()  # Should raise validation error for missing name
+
+    def test_context_provider_full_creation(self):
+        """Test ContextProvider creation with all fields."""
+        provider = ContextProvider(
+            name="KGridFormDataManager",
+            domain="test_domain",
+            entity_name="subworkflow",
+            data={"key": "value"},
+            extra_data={"extra_key": "extra_value"},
+            is_edited=True,
+            context={"context_key": "context_value"},
+        )
+        assert provider.name == "KGridFormDataManager"
+        assert provider.domain == "test_domain"
+        assert provider.entity_name == "subworkflow"
+        assert provider.data == {"key": "value"}
+        assert provider.extra_data == {"extra_key": "extra_value"}
+        assert provider.is_edited is True
+        assert provider.context == {"context_key": "context_value"}
+
+    def test_context_provider_default_values(self):
+        """Test ContextProvider default values."""
+        provider = ContextProvider(name="test")
+        assert provider.domain == "default"
+        assert provider.entity_name == "unit"
+        assert provider.data is None
+        assert provider.extra_data is None
+        assert provider.is_edited is None
+        assert provider.context is None
+
+    def test_context_provider_extra_data_key(self):
+        """Test extra_data_key property."""
+        provider = ContextProvider(name="kpath")
+        assert provider.extra_data_key == "kpathExtraData"
+
+    def test_context_provider_is_edited_key(self):
+        """Test is_edited_key property."""
+        provider = ContextProvider(name="kpath")
+        assert provider.is_edited_key == "isKpathEdited"
+
+    def test_context_provider_is_unit_context_provider(self):
+        """Test is_unit_context_provider property."""
+        unit_provider = ContextProvider(name="test", entity_name="unit")
+        assert unit_provider.is_unit_context_provider is True
+        
+        subworkflow_provider = ContextProvider(name="test", entity_name="subworkflow")
+        assert subworkflow_provider.is_unit_context_provider is False
+
+    def test_context_provider_is_subworkflow_context_provider(self):
+        """Test is_subworkflow_context_provider property."""
+        unit_provider = ContextProvider(name="test", entity_name="unit")
+        assert unit_provider.is_subworkflow_context_provider is False
+        
+        subworkflow_provider = ContextProvider(name="test", entity_name="subworkflow")
+        assert subworkflow_provider.is_subworkflow_context_provider is True
+
+
+class TestJinjaContextProvider:
+    """Test suite for JinjaContextProvider class."""
+
+    def test_jinja_context_provider_creation(self):
+        """Test JinjaContextProvider creation."""
+        provider = JinjaContextProvider(name="test")
+        assert provider.name == "test"
+        assert provider.is_using_jinja_variables is False
+
+    def test_jinja_context_provider_with_jinja_variables(self):
+        """Test JinjaContextProvider with is_using_jinja_variables set."""
+        provider = JinjaContextProvider(name="test", is_using_jinja_variables=True)
+        assert provider.is_using_jinja_variables is True
+
+    def test_jinja_context_provider_inherits_context_provider(self):
+        """Test that JinjaContextProvider inherits from ContextProvider."""
+        provider = JinjaContextProvider(
+            name="test",
+            domain="custom",
+            entity_name="subworkflow",
+            is_using_jinja_variables=True,
+        )
+        assert provider.domain == "custom"
+        assert provider.entity_name == "subworkflow"
+        assert provider.is_using_jinja_variables is True
+        assert provider.is_subworkflow_context_provider is True
+
+
+class TestJSONSchemaDataProvider:
+    """Test suite for JSONSchemaDataProvider class."""
+
+    def test_json_schema_data_provider_creation(self):
+        """Test JSONSchemaDataProvider creation."""
+        provider = JSONSchemaDataProvider(name="test")
+        assert provider.name == "test"
+        assert provider.json_schema is None
+
+    def test_json_schema_data_provider_with_schema(self):
+        """Test JSONSchemaDataProvider with json_schema set."""
+        schema = {"type": "object", "properties": {"value": {"type": "number"}}}
+        provider = JSONSchemaDataProvider(name="test", json_schema=schema)
+        assert provider.json_schema == schema
+
+    def test_json_schema_data_provider_inherits_jinja(self):
+        """Test that JSONSchemaDataProvider inherits from JinjaContextProvider."""
+        provider = JSONSchemaDataProvider(
+            name="test",
+            is_using_jinja_variables=True,
+            json_schema={"type": "object"},
+        )
+        assert provider.is_using_jinja_variables is True
+        assert provider.json_schema == {"type": "object"}
+
+
+class TestJSONSchemaFormDataProvider:
+    """Test suite for JSONSchemaFormDataProvider class."""
+
+    def test_json_schema_form_data_provider_creation(self):
+        """Test JSONSchemaFormDataProvider creation."""
+        provider = JSONSchemaFormDataProvider(name="test")
+        assert provider.name == "test"
+        assert provider.ui_schema is None
+        assert provider.fields == {}
+        assert provider.default_field_styles == {}
+
+    def test_json_schema_form_data_provider_with_all_fields(self):
+        """Test JSONSchemaFormDataProvider with all fields."""
+        provider = JSONSchemaFormDataProvider(
+            name="test",
+            json_schema={"type": "object"},
+            ui_schema={"ui:widget": "textarea"},
+            fields={"custom": "field"},
+            default_field_styles={"margin": "10px"},
+        )
+        assert provider.json_schema == {"type": "object"}
+        assert provider.ui_schema == {"ui:widget": "textarea"}
+        assert provider.fields == {"custom": "field"}
+        assert provider.default_field_styles == {"margin": "10px"}
+
+    def test_json_schema_form_data_provider_inherits_hierarchy(self):
+        """Test that JSONSchemaFormDataProvider inherits full hierarchy."""
+        provider = JSONSchemaFormDataProvider(
+            name="test",
+            domain="custom",
+            entity_name="unit",
+            is_using_jinja_variables=True,
+            json_schema={"type": "object"},
+            ui_schema={"ui:widget": "select"},
+        )
+        # From ContextProvider
+        assert provider.domain == "custom"
+        assert provider.entity_name == "unit"
+        assert provider.is_unit_context_provider is True
+        # From JinjaContextProvider
+        assert provider.is_using_jinja_variables is True
+        # From JSONSchemaDataProvider
+        assert provider.json_schema == {"type": "object"}
+        # From JSONSchemaFormDataProvider
+        assert provider.ui_schema == {"ui:widget": "select"}
 
 
 class TestTemplate:

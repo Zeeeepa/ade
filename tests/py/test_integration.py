@@ -110,9 +110,13 @@ class TestIntegration:
         from mat3ra.ade import (
             Application,
             ContextProvider,
+            ContextProviderName,
             Executable,
             Flavor,
             FlavorInput,
+            JinjaContextProvider,
+            JSONSchemaDataProvider,
+            JSONSchemaFormDataProvider,
             Template,
         )
 
@@ -123,3 +127,7 @@ class TestIntegration:
         assert FlavorInput is not None
         assert Template is not None
         assert ContextProvider is not None
+        assert ContextProviderName is not None
+        assert JinjaContextProvider is not None
+        assert JSONSchemaDataProvider is not None
+        assert JSONSchemaFormDataProvider is not None
