@@ -80,7 +80,6 @@ class TestContextProvider:
         """Test is_unit_context_provider property."""
         unit_provider = ContextProvider(name="test", entity_name="unit")
         assert unit_provider.is_unit_context_provider is True
-        
         subworkflow_provider = ContextProvider(name="test", entity_name="subworkflow")
         assert subworkflow_provider.is_unit_context_provider is False
 
@@ -88,7 +87,6 @@ class TestContextProvider:
         """Test is_subworkflow_context_provider property."""
         unit_provider = ContextProvider(name="test", entity_name="unit")
         assert unit_provider.is_subworkflow_context_provider is False
-        
         subworkflow_provider = ContextProvider(name="test", entity_name="subworkflow")
         assert subworkflow_provider.is_subworkflow_context_provider is True
 
