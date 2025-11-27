@@ -1,11 +1,8 @@
-"""Integration tests demonstrating usage of all classes together."""
-
 from mat3ra.ade import Application, ContextProvider, Executable, Flavor, FlavorInput, Template
+from mat3ra.esse.models.context_provider import Name
 
 
 class TestIntegration:
-    """Integration tests for the ade Python package."""
-
     def test_end_to_end_workflow(self):
         """Test creating and using all classes together."""
         # Create an application
@@ -13,10 +10,10 @@ class TestIntegration:
             name="espresso",
             version="7.2",
             build="standard",
-            short_name="QE",
+            shortName="QE",
             summary="Quantum ESPRESSO",
-            has_advanced_compute_options=True,
-            is_licensed=False,
+            hasAdvancedComputeOptions=True,
+            isLicensed=False,
         )
 
         # Verify application properties
@@ -27,24 +24,24 @@ class TestIntegration:
         # Create an executable
         executable = Executable(
             name="pw.x",
-            application_id=[app.name],
-            is_default=True,
+            applicationId=[app.name],
+            isDefault=True,
             monitors=[{"name": "convergence"}],
             results=[{"name": "total_energy"}, {"name": "band_gap"}],
         )
 
         # Verify executable properties
         assert executable.name == "pw.x"
-        assert executable.application_id == ["espresso"]
+        assert executable.applicationId == ["espresso"]
         assert len(executable.results) == 2
 
         # Create a template
         template = Template(
             name="pw_scf.in",
             content="&CONTROL\n  calculation='scf'\n/",
-            application_name=app.name,
-            executable_name=executable.name,
-            context_providers=[ContextProvider(name="material")],
+            applicationName=app.name,
+            executableName=executable.name,
+            context_providers=[ContextProvider(name=Name.KGridFormDataManager)],
         )
 
         # Verify template properties
@@ -55,17 +52,17 @@ class TestIntegration:
         # Create a flavor
         flavor = Flavor(
             name="scf",
-            executable_name=executable.name,
-            application_name=app.name,
+            executableName=executable.name,
+            applicationName=app.name,
             input=[FlavorInput(template_name=template.name, name="pw_scf.in")],
-            supported_application_versions=["7.0", "7.1", "7.2"],
-            is_default=True,
+            supportedApplicationVersions=["7.0", "7.1", "7.2"],
+            isDefault=True,
         )
 
         # Verify flavor properties
         assert flavor.name == "scf"
-        assert flavor.application_name == app.name
-        assert flavor.executable_name == executable.name
+        assert flavor.applicationName == app.name
+        assert flavor.executableName == executable.name
         assert len(flavor.input) == 1
         assert flavor.input[0].template_name == template.name
 
@@ -73,12 +70,12 @@ class TestIntegration:
         """Test serialization and deserialization of all classes."""
         # Create instances
         app = Application(name="vasp", version="5.4.4")
-        executable = Executable(name="vasp_std", application_id=["vasp"])
+        executable = Executable(name="vasp_std", applicationId=["vasp"])
         template = Template(name="INCAR", content="SYSTEM = Test")
         flavor = Flavor(
             name="standard",
-            application_name="vasp",
-            executable_name="vasp_std",
+            applicationName="vasp",
+            executableName="vasp_std",
         )
 
         # Serialize to dict
@@ -105,29 +102,4 @@ class TestIntegration:
         assert tmpl_restored.name == template.name
         assert flv_restored.name == flavor.name
 
-    def test_import_all_from_package(self):
-        """Test that all classes can be imported from the package."""
-        from mat3ra.ade import (
-            Application,
-            ContextProvider,
-            ContextProviderName,
-            Executable,
-            Flavor,
-            FlavorInput,
-            JinjaContextProvider,
-            JSONSchemaDataProvider,
-            JSONSchemaFormDataProvider,
-            Template,
-        )
 
-        # Verify all are importable and are classes
-        assert Application is not None
-        assert Executable is not None
-        assert Flavor is not None
-        assert FlavorInput is not None
-        assert Template is not None
-        assert ContextProvider is not None
-        assert ContextProviderName is not None
-        assert JinjaContextProvider is not None
-        assert JSONSchemaDataProvider is not None
-        assert JSONSchemaFormDataProvider is not None

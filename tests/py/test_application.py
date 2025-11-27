@@ -11,10 +11,10 @@ class TestApplication:
         """Test basic application creation."""
         app = Application(name="espresso")
         assert app.name == "espresso"
-        assert app.version == ""
+        assert app.version is None
         assert app.build is None
-        assert app.has_advanced_compute_options is False
-        assert app.is_licensed is False
+        assert app.hasAdvancedComputeOptions is None
+        assert app.isLicensed is None
 
     def test_application_with_all_fields(self):
         """Test application creation with all fields."""
@@ -22,22 +22,22 @@ class TestApplication:
             name="vasp",
             version="5.4.4",
             build="standard",
-            short_name="VASP",
+            shortName="VASP",
             summary="Vienna Ab initio Simulation Package",
-            has_advanced_compute_options=True,
-            is_licensed=True,
-            is_default=True,
-            schema_version="1.0.0",
+            hasAdvancedComputeOptions=True,
+            isLicensed=True,
+            isDefault=True,
+            schemaVersion="1.0.0",
         )
         assert app.name == "vasp"
         assert app.version == "5.4.4"
         assert app.build == "standard"
-        assert app.short_name == "VASP"
+        assert app.shortName == "VASP"
         assert app.summary == "Vienna Ab initio Simulation Package"
-        assert app.has_advanced_compute_options is True
-        assert app.is_licensed is True
-        assert app.is_default is True
-        assert app.schema_version == "1.0.0"
+        assert app.hasAdvancedComputeOptions is True
+        assert app.isLicensed is True
+        assert app.isDefault is True
+        assert app.schemaVersion == "1.0.0"
 
     def test_is_using_material_property(self):
         """Test is_using_material property."""
@@ -57,11 +57,11 @@ class TestApplication:
 
     def test_get_short_name(self):
         """Test get_short_name method."""
-        # With short_name set
-        app_with_short = Application(name="espresso", short_name="QE")
+        # With shortName set
+        app_with_short = Application(name="espresso", shortName="QE")
         assert app_with_short.get_short_name() == "QE"
 
-        # Without short_name set
+        # Without shortName set
         app_without_short = Application(name="espresso")
         assert app_without_short.get_short_name() == "espresso"
 
@@ -79,13 +79,13 @@ class TestApplication:
             "name": "espresso",
             "version": "7.2",
             "build": "openmpi",
-            "short_name": "QE",
+            "shortName": "QE",
         }
         app = Application(**app_dict)
         assert app.name == "espresso"
         assert app.version == "7.2"
         assert app.build == "openmpi"
-        assert app.short_name == "QE"
+        assert app.shortName == "QE"
 
     def test_application_with_extra_fields(self):
         """Test that extra fields are allowed."""

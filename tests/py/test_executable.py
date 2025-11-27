@@ -11,66 +11,66 @@ class TestExecutable:
         """Test basic executable creation."""
         exe = Executable(name="pw.x")
         assert exe.name == "pw.x"
-        assert exe.application_id == []
-        assert exe.has_advanced_compute_options is None
-        assert exe.is_default is None
-        assert exe.pre_processors == []
-        assert exe.post_processors == []
-        assert exe.monitors == []
-        assert exe.results == []
+        assert exe.applicationId is None
+        assert exe.hasAdvancedComputeOptions is None
+        assert exe.isDefault is None
+        assert exe.preProcessors is None
+        assert exe.postProcessors is None
+        assert exe.monitors is None
+        assert exe.results is None
 
     def test_executable_with_all_fields(self):
         """Test executable creation with all fields."""
         exe = Executable(
             name="pw.x",
-            application_id=["app1", "app2"],
-            has_advanced_compute_options=True,
-            is_default=True,
-            schema_version="1.0.0",
-            pre_processors=[{"name": "prep1"}],
-            post_processors=[{"name": "post1"}],
+            applicationId=["app1", "app2"],
+            hasAdvancedComputeOptions=True,
+            isDefault=True,
+            schemaVersion="1.0.0",
+            preProcessors=[{"name": "prep1"}],
+            postProcessors=[{"name": "post1"}],
             monitors=[{"name": "mon1"}],
             results=[{"name": "res1"}],
         )
         assert exe.name == "pw.x"
-        assert exe.application_id == ["app1", "app2"]
-        assert exe.has_advanced_compute_options is True
-        assert exe.is_default is True
-        assert exe.schema_version == "1.0.0"
-        assert len(exe.pre_processors) == 1
-        assert len(exe.post_processors) == 1
+        assert exe.applicationId == ["app1", "app2"]
+        assert exe.hasAdvancedComputeOptions is True
+        assert exe.isDefault is True
+        assert exe.schemaVersion == "1.0.0"
+        assert len(exe.preProcessors) == 1
+        assert len(exe.postProcessors) == 1
         assert len(exe.monitors) == 1
         assert len(exe.results) == 1
 
     def test_executable_application_id_setter(self):
-        """Test setting application_id."""
+        """Test setting applicationId."""
         exe = Executable(name="pw.x")
-        assert exe.application_id == []
+        assert exe.applicationId is None
 
-        exe.application_id = ["app1", "app2"]
-        assert exe.application_id == ["app1", "app2"]
+        exe.applicationId = ["app1", "app2"]
+        assert exe.applicationId == ["app1", "app2"]
 
     def test_executable_to_dict(self):
         """Test converting executable to dictionary."""
-        exe = Executable(name="pw.x", application_id=["app1"])
+        exe = Executable(name="pw.x", applicationId=["app1"])
         exe_dict = exe.model_dump()
         assert isinstance(exe_dict, dict)
         assert exe_dict["name"] == "pw.x"
-        assert exe_dict["application_id"] == ["app1"]
+        assert exe_dict["applicationId"] == ["app1"]
 
     def test_executable_from_dict(self):
         """Test creating executable from dictionary."""
         exe_dict = {
             "name": "pw.x",
-            "application_id": ["app1"],
-            "is_default": True,
+            "applicationId": ["app1"],
+            "isDefault": True,
             "monitors": [{"name": "convergence"}],
             "results": [{"name": "total_energy"}],
         }
         exe = Executable(**exe_dict)
         assert exe.name == "pw.x"
-        assert exe.application_id == ["app1"]
-        assert exe.is_default is True
+        assert exe.applicationId == ["app1"]
+        assert exe.isDefault is True
         assert len(exe.monitors) == 1
         assert len(exe.results) == 1
 

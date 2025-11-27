@@ -1,19 +1,21 @@
-from typing import List, Optional
+from typing import List
 
 from mat3ra.esse.models.software.flavor import FlavorSchema, \
     ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines
-from pydantic import Field
+from pydantic import ConfigDict, Field
 
 
 class FlavorInput(ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines):
-    """Input template reference for a flavor."""
+    """
+    FlavorInput class representing an input template for a flavor.
 
-    template_id: Optional[str] = Field(default=None, description="Template ID")
-    template_name: Optional[str] = Field(default=None, description="Template name")
-    name: Optional[str] = Field(
-        default=None, description="Name of the resulting input file, if different than template name"
-    )
+    Attributes:
+        templateId: ID of the template
+        templateName: Name of the template
+        name: Name of the resulting input file, if different from template name
+    """
 
+    pass
 
 class Flavor(FlavorSchema):
     """
@@ -26,7 +28,6 @@ class Flavor(FlavorSchema):
         applicationName: Name of the application this flavor belongs to
         input: List of input templates for this flavor
         supportedApplicationVersions: List of application versions this flavor supports
-        disableRenderMaterials: Whether to disable rendering materials
         isDefault: Identifies that entity is defaultable
         schemaVersion: Entity's schema version
         preProcessors: Names of the pre-processors for this calculation
@@ -36,3 +37,5 @@ class Flavor(FlavorSchema):
     """
 
     input: List[FlavorInput] = Field(default_factory=list, description="Input templates for this flavor")
+
+    model_config = ConfigDict(validate_assignment=True, extra="allow")

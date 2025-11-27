@@ -1,7 +1,7 @@
 from typing import List
 
 from mat3ra.esse.models.software.template import TemplateSchema
-from pydantic import Field
+from pydantic import ConfigDict, Field
 
 from .context.context_provider import ContextProvider
 
@@ -25,6 +25,8 @@ class Template(TemplateSchema):
     context_providers: List[ContextProvider] = Field(
         default_factory=list, description="List of context providers for this template"
     )
+
+    model_config = ConfigDict(validate_assignment=True, extra="allow")
 
     def get_rendered(self) -> str:
         return self.rendered if self.rendered is not None else self.content

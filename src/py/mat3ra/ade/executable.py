@@ -1,4 +1,5 @@
 from mat3ra.esse.models.software.executable import ExecutableSchema
+from pydantic import ConfigDict
 
 
 class Executable(ExecutableSchema):
@@ -16,4 +17,5 @@ class Executable(ExecutableSchema):
         monitors: Names of the monitors for this calculation
         results: Names of the results for this calculation
     """
-    pass
+
+    model_config = ConfigDict(validate_assignment=True, extra="allow")

@@ -24,6 +24,6 @@ class Application(ApplicationSchemaBase):
         return self.name in material_using_applications
 
     def get_short_name(self) -> str:
-        return self.short_name if self.short_name else self.name
+        return self.shortName if self.shortName else self.name
 
     model_config = ConfigDict(validate_assignment=True, extra="allow")

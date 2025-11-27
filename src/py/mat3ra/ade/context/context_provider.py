@@ -23,17 +23,19 @@ class ContextProvider(ContextProviderSchema):
 
     @property
     def extra_data_key(self) -> str:
-        return f"{self.name}ExtraData"
+        name_str = self.name.value if hasattr(self.name, 'value') else str(self.name)
+        return f"{name_str}ExtraData"
 
     @property
     def is_edited_key(self) -> str:
-        return f"is{str(self.name).capitalize()}Edited"
+        name_str = self.name.value if hasattr(self.name, 'value') else str(self.name)
+        return f"is{name_str}Edited"
 
     @property
     def is_unit_context_provider(self) -> bool:
-        return self.entity_name == "unit"
+        return self.entityName == "unit"
 
     @property
     def is_subworkflow_context_provider(self) -> bool:
-        return self.entity_name == "subworkflow"
+        return self.entityName == "subworkflow"
 
