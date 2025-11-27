@@ -37,6 +37,7 @@ tests = [
     "coverage[toml]>=5.3",
     "pytest",
     "pytest-cov",
+    "mat3ra-esse"
 ]
 all = [
     "mat3ra-ade[tests]",

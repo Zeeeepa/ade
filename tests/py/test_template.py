@@ -1,27 +1,12 @@
-"""Tests for Template class."""
-
 import pytest
 from mat3ra.ade import (
     ContextProvider,
-    ContextProviderName,
     JinjaContextProvider,
     JSONSchemaDataProvider,
-    JSONSchemaFormDataProvider,
     Template,
 )
 
-
-class TestContextProviderName:
-    """Test suite for ContextProviderName enum."""
-
-    def test_context_provider_name_enum_values(self):
-        """Test that ContextProviderName enum has expected values."""
-        assert ContextProviderName.PlanewaveCutoffDataManager == "PlanewaveCutoffDataManager"
-        assert ContextProviderName.KGridFormDataManager == "KGridFormDataManager"
-        assert ContextProviderName.QGridFormDataManager == "QGridFormDataManager"
-        assert ContextProviderName.IonDynamicsContextProvider == "IonDynamicsContextProvider"
-        assert ContextProviderName.VASPInputDataManager == "VASPInputDataManager"
-        assert ContextProviderName.NWChemInputDataManager == "NWChemInputDataManager"
+from mat3ra.esse.models.context_provider import Name
 
 
 class TestContextProvider:
@@ -40,13 +25,13 @@ class TestContextProvider:
     def test_context_provider_full_creation(self):
         """Test ContextProvider creation with all fields."""
         provider = ContextProvider(
-            name="KGridFormDataManager",
+            name=Name.KGridFormDataManager,
             domain="test_domain",
-            entity_name="subworkflow",
+            entityName="subworkflow",
             data={"key": "value"},
-            extra_data={"extra_key": "extra_value"},
-            is_edited=True,
-            context={"context_key": "context_value"},
+            extraData={"extraKey": "extraValue"},
+            isEdited=True,
+            context={"contextKey": "contextValue"},
         )
         assert provider.name == "KGridFormDataManager"
         assert provider.domain == "test_domain"
@@ -144,52 +129,6 @@ class TestJSONSchemaDataProvider:
         assert provider.is_using_jinja_variables is True
         assert provider.json_schema == {"type": "object"}
 
-
-class TestJSONSchemaFormDataProvider:
-    """Test suite for JSONSchemaFormDataProvider class."""
-
-    def test_json_schema_form_data_provider_creation(self):
-        """Test JSONSchemaFormDataProvider creation."""
-        provider = JSONSchemaFormDataProvider(name="test")
-        assert provider.name == "test"
-        assert provider.ui_schema is None
-        assert provider.fields == {}
-        assert provider.default_field_styles == {}
-
-    def test_json_schema_form_data_provider_with_all_fields(self):
-        """Test JSONSchemaFormDataProvider with all fields."""
-        provider = JSONSchemaFormDataProvider(
-            name="test",
-            json_schema={"type": "object"},
-            ui_schema={"ui:widget": "textarea"},
-            fields={"custom": "field"},
-            default_field_styles={"margin": "10px"},
-        )
-        assert provider.json_schema == {"type": "object"}
-        assert provider.ui_schema == {"ui:widget": "textarea"}
-        assert provider.fields == {"custom": "field"}
-        assert provider.default_field_styles == {"margin": "10px"}
-
-    def test_json_schema_form_data_provider_inherits_hierarchy(self):
-        """Test that JSONSchemaFormDataProvider inherits full hierarchy."""
-        provider = JSONSchemaFormDataProvider(
-            name="test",
-            domain="custom",
-            entity_name="unit",
-            is_using_jinja_variables=True,
-            json_schema={"type": "object"},
-            ui_schema={"ui:widget": "select"},
-        )
-        # From ContextProvider
-        assert provider.domain == "custom"
-        assert provider.entity_name == "unit"
-        assert provider.is_unit_context_provider is True
-        # From JinjaContextProvider
-        assert provider.is_using_jinja_variables is True
-        # From JSONSchemaDataProvider
-        assert provider.json_schema == {"type": "object"}
-        # From JSONSchemaFormDataProvider
-        assert provider.ui_schema == {"ui:widget": "select"}
 
 
 class TestTemplate:
