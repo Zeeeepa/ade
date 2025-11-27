@@ -30,10 +30,10 @@ describe("ApplicationRegistry", () => {
         };
 
         Template.setContextProvidersConfig({
-            [ContextProviderNameEnum.QGridFormDataManager]: mockConfig,
-            [ContextProviderNameEnum.PlanewaveCutoffDataManager]: mockConfig,
-            [ContextProviderNameEnum.KGridFormDataManager]: mockConfig,
-            [ContextProviderNameEnum.QEPWXInputDataManager]: mockConfig,
+            QGridFormDataManager: mockConfig,
+            PlanewaveCutoffDataManager: mockConfig,
+            KGridFormDataManager: mockConfig,
+            QEPWXInputDataManager: mockConfig,
         });
     });
 

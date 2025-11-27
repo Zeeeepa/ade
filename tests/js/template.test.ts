@@ -24,31 +24,31 @@ const mockConfig: ContextProviderConfigMapEntry = {
 };
 
 const providersConfig: ContextProviderConfigMap = {
-    [ContextProviderNameEnum.QGridFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.PlanewaveCutoffDataManager]: mockConfig,
-    [ContextProviderNameEnum.KGridFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.IGridFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.QPathFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.IPathFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.KPathFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.ExplicitKPathFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.ExplicitKPath2PIBAFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.HubbardJContextManager]: mockConfig,
-    [ContextProviderNameEnum.HubbardUContextManager]: mockConfig,
-    [ContextProviderNameEnum.HubbardVContextManager]: mockConfig,
-    [ContextProviderNameEnum.HubbardContextManagerLegacy]: mockConfig,
-    [ContextProviderNameEnum.NEBFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.BoundaryConditionsFormDataManager]: mockConfig,
-    [ContextProviderNameEnum.MLSettingsDataManager]: mockConfig,
-    [ContextProviderNameEnum.MLTrainTestSplitDataManager]: mockConfig,
-    [ContextProviderNameEnum.IonDynamicsContextProvider]: mockConfig,
-    [ContextProviderNameEnum.CollinearMagnetizationDataManager]: mockConfig,
-    [ContextProviderNameEnum.NonCollinearMagnetizationDataManager]: mockConfig,
-    [ContextProviderNameEnum.QEPWXInputDataManager]: mockConfig,
-    [ContextProviderNameEnum.QENEBInputDataManager]: mockConfig,
-    [ContextProviderNameEnum.VASPInputDataManager]: mockConfig,
-    [ContextProviderNameEnum.VASPNEBInputDataManager]: mockConfig,
-    [ContextProviderNameEnum.NWChemInputDataManager]: mockConfig,
+    QGridFormDataManager: mockConfig,
+    PlanewaveCutoffDataManager: mockConfig,
+    KGridFormDataManager: mockConfig,
+    IGridFormDataManager: mockConfig,
+    QPathFormDataManager: mockConfig,
+    IPathFormDataManager: mockConfig,
+    KPathFormDataManager: mockConfig,
+    ExplicitKPathFormDataManager: mockConfig,
+    ExplicitKPath2PIBAFormDataManager: mockConfig,
+    HubbardJContextManager: mockConfig,
+    HubbardUContextManager: mockConfig,
+    HubbardVContextManager: mockConfig,
+    HubbardContextManagerLegacy: mockConfig,
+    NEBFormDataManager: mockConfig,
+    BoundaryConditionsFormDataManager: mockConfig,
+    MLSettingsDataManager: mockConfig,
+    MLTrainTestSplitDataManager: mockConfig,
+    IonDynamicsContextProvider: mockConfig,
+    CollinearMagnetizationDataManager: mockConfig,
+    NonCollinearMagnetizationDataManager: mockConfig,
+    QEPWXInputDataManager: mockConfig,
+    QENEBInputDataManager: mockConfig,
+    VASPInputDataManager: mockConfig,
+    VASPNEBInputDataManager: mockConfig,
+    NWChemInputDataManager: mockConfig,
 };
 
 before(() => {
@@ -317,17 +317,36 @@ describe("Template", () => {
 
         // Added with LLM to help with coverage
         it("should handle getDataFromProvidersForPersistentContext with edited providers", () => {
-            const editedProvider = new MockContextProvider({ name: ContextProviderNameEnum.QGridFormDataManager, domain: "test" });
+            const editedProvider = new MockContextProvider({
+                name: ContextProviderNameEnum.QGridFormDataManager,
+                domain: "test",
+            });
             editedProvider.isEdited = true;
             editedProvider.yieldData = () => ({ data: { value: 1 } });
 
-            const nonEditedProvider = new MockContextProvider({ name: ContextProviderNameEnum.PlanewaveCutoffDataManager, domain: "test" });
+            const nonEditedProvider = new MockContextProvider({
+                name: ContextProviderNameEnum.PlanewaveCutoffDataManager,
+                domain: "test",
+            });
             nonEditedProvider.isEdited = false;
             nonEditedProvider.yieldData = () => ({ data: { value: 2 } });
 
-            template.getContextProvidersAsClassInstances = () => [editedProvider, nonEditedProvider];
+            template.getContextProvidersAsClassInstances = () => [
+                editedProvider,
+                nonEditedProvider,
+            ];
             const result = template.getDataFromProvidersForPersistentContext();
             expect(result).to.deep.equal({ data: { value: 1 } });
+        });
+
+        it("should throw error when provider not found", () => {
+            template.setProp("contextProviders", [
+                { name: ContextProviderNameEnum.KGridFormDataManager },
+            ]);
+            Template.contextProviderRegistry = null;
+            expect(() => template.getContextProvidersAsClassInstances()).to.throw(
+                /Provider .* not found/,
+            );
         });
     });
 
