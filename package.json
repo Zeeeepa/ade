@@ -92,7 +92,13 @@
         "node": ">=20.0.0"
     },
     "lint-staged": {
-        "src/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"],
-        "tests/js/**/*.{js,ts}": ["eslint --cache --fix", "prettier --write"]
+        "src/js/**/*.{js,ts}": [
+            "eslint --cache --fix",
+            "prettier --write"
+        ],
+        "tests/js/**/*.{js,ts}": [
+            "eslint --cache --fix",
+            "prettier --write"
+        ]
     }
 }

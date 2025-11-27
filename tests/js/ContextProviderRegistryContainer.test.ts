@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { Name as ContextProviderNameEnum } from "@mat3ra/esse/dist/js/types";
 import { expect } from "chai";
 
@@ -77,7 +76,9 @@ describe("ContextProviderRegistryContainer", () => {
             });
 
             expect(container.providers).to.have.length(2);
-            expect(container.providers[0].name).to.equal(ContextProviderNameEnum.QGridFormDataManager);
+            expect(container.providers[0].name).to.equal(
+                ContextProviderNameEnum.QGridFormDataManager,
+            );
             expect(container.providers[1].name).to.equal(
                 ContextProviderNameEnum.PlanewaveCutoffDataManager,
             );
@@ -259,8 +260,9 @@ describe("ContextProviderRegistryContainer", () => {
             container.removeProviderByName(ContextProviderNameEnum.QGridFormDataManager);
 
             // Verify state
-            expect(container.findProviderInstanceByName(ContextProviderNameEnum.QGridFormDataManager))
-                .to.be.undefined;
+            expect(
+                container.findProviderInstanceByName(ContextProviderNameEnum.QGridFormDataManager),
+            ).to.be.undefined;
             expect(
                 container.findProviderInstanceByName(
                     ContextProviderNameEnum.PlanewaveCutoffDataManager,

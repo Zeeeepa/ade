@@ -2,8 +2,8 @@ import type { InMemoryEntity } from "@mat3ra/code/dist/js/entity";
 import type { NamedInMemoryEntity } from "@mat3ra/code/dist/js/entity/mixins/NamedEntityMixin";
 import type { Constructor } from "@mat3ra/code/dist/js/utils/types";
 import type { AnyObject } from "@mat3ra/esse/dist/js/esse/types";
-import type { TemplateSchema } from "@mat3ra/esse/dist/js/types";
-import ContextProvider, { type ContextProviderConfig, type ContextProviderName } from "./context/ContextProvider";
+import type { ContextProviderNameEnum, ContextProviderSchema, TemplateSchema } from "@mat3ra/esse/dist/js/types";
+import ContextProvider from "./context/ContextProvider";
 import ContextProviderRegistryContainer from "./context/ContextProviderRegistryContainer";
 export type TemplateBase = InMemoryEntity & NamedInMemoryEntity;
 export type TemplateMixin = {
@@ -28,9 +28,9 @@ export type TemplateMixin = {
 export declare function templateMixin(item: TemplateBase): TemplateMixin & InMemoryEntity & NamedInMemoryEntity;
 export type ContextProviderConfigMapEntry = {
     providerCls: typeof ContextProvider;
-    config: ContextProviderConfig;
+    config: ContextProviderSchema;
 };
-export type ContextProviderConfigMap = Partial<Record<ContextProviderName, ContextProviderConfigMapEntry>>;
+export type ContextProviderConfigMap = Partial<Record<ContextProviderNameEnum, ContextProviderConfigMapEntry>>;
 export type TemplateStaticMixin = {
     contextProviderRegistry: ContextProviderRegistryContainer | null;
     setContextProvidersConfig: (classConfigMap: ContextProviderConfigMap) => void;

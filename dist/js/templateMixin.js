@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.templateMixin = templateMixin;
 exports.templateStaticMixin = templateStaticMixin;
-const utils_1 = require("@mat3ra/utils");
 const JSONSchemasInterface_1 = __importDefault(require("@mat3ra/esse/dist/js/esse/JSONSchemasInterface"));
+const utils_1 = require("@mat3ra/utils");
 const nunjucks_1 = __importDefault(require("nunjucks"));
 const ContextProviderRegistryContainer_1 = __importDefault(require("./context/ContextProviderRegistryContainer"));
 function templateMixin(item) {
