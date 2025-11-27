@@ -1,5 +1,7 @@
-from typing import List
+from copy import deepcopy
+from typing import Any, Dict, List, Optional
 
+from jinja2 import Environment
 from mat3ra.esse.models.software.template import TemplateSchema
 from pydantic import ConfigDict, Field
 
@@ -30,4 +32,66 @@ class Template(TemplateSchema):
 
     def get_rendered(self) -> str:
         return self.rendered if self.rendered is not None else self.content
+
+    def set_content(self, text: str) -> None:
+        self.content = text
+
+    def set_rendered(self, text: str) -> None:
+        self.rendered = text
+
+    def add_context_provider(self, provider: ContextProvider) -> None:
+        self.context_providers = [*self.context_providers, provider]
+
+    def remove_context_provider(self, provider: ContextProvider) -> None:
+        self.context_providers = [
+            p
+            for p in self.context_providers
+            if not (p.name == provider.name and p.domain == provider.domain)
+        ]
+
+    def _clean_rendering_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        cleaned = deepcopy(context)
+        cleaned.pop("job", None)
+        return cleaned
+
+    def _get_data_from_providers_for_rendering_context(
+        self, provider_context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        result: Dict[str, Any] = {}
+        for provider in self.context_providers:
+            context = provider.yield_data_for_rendering()
+            for key, value in context.items():
+                if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+                    result[key] = {**result[key], **value}
+                else:
+                    result[key] = value
+        return result
+
+    def _get_rendering_context(
+        self, external_context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        provider_context = external_context or {}
+        return {
+            **(external_context or {}),
+            **self._get_data_from_providers_for_rendering_context(provider_context),
+        }
+
+    def render(self, external_context: Optional[Dict[str, Any]] = None) -> None:
+        rendering_context = self._get_rendering_context(external_context)
+        if not self.isManuallyChanged:
+            try:
+                env = Environment()
+                template = env.from_string(self.content)
+                cleaned_context = self._clean_rendering_context(rendering_context)
+                rendered = template.render(cleaned_context)
+                if not self.isManuallyChanged:
+                    self.rendered = rendered or self.content
+            except Exception as e:
+                print(f"Template is not compiled: {e}")
+                print(f"content: {self.content}")
+                print(f"_clean_rendering_context: {self._clean_rendering_context(rendering_context)}")
+
+    def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        self.render(context)
+        return self.model_dump()
 

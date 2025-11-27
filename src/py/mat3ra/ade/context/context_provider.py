@@ -1,4 +1,7 @@
+from typing import Any, Dict
+
 from mat3ra.esse.models.context_provider import ContextProviderSchema
+
 
 class ContextProvider(ContextProviderSchema):
     """
@@ -22,14 +25,16 @@ class ContextProvider(ContextProviderSchema):
     """
 
     @property
+    def name_str(self) -> str:
+        return self.name.value if hasattr(self.name, 'value') else str(self.name)
+
+    @property
     def extra_data_key(self) -> str:
-        name_str = self.name.value if hasattr(self.name, 'value') else str(self.name)
-        return f"{name_str}ExtraData"
+        return f"{self.name_str}ExtraData"
 
     @property
     def is_edited_key(self) -> str:
-        name_str = self.name.value if hasattr(self.name, 'value') else str(self.name)
-        return f"is{name_str}Edited"
+        return f"is{self.name_str}Edited"
 
     @property
     def is_unit_context_provider(self) -> bool:
@@ -38,4 +43,16 @@ class ContextProvider(ContextProviderSchema):
     @property
     def is_subworkflow_context_provider(self) -> bool:
         return self.entityName == "subworkflow"
+
+    def yield_data(self) -> Dict[str, Any]:
+        result = {
+            self.name_str: self.data,
+            self.is_edited_key: self.isEdited,
+        }
+        if self.extraData:
+            result[self.extra_data_key] = self.extraData
+        return result
+
+    def yield_data_for_rendering(self) -> Dict[str, Any]:
+        return self.yield_data()
 
