@@ -21,6 +21,7 @@ classifiers = [
 dependencies = [
     "numpy",
     "pydantic>=2.0",
+    "mat3ra-esse"
 ]
 
 [project.optional-dependencies]
