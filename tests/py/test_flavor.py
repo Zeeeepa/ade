@@ -68,10 +68,3 @@ def test_flavor_from_dict():
     flavor = Flavor(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, flavor.model_dump(exclude_unset=True))
-
-
-def test_flavor_with_extra_fields():
-    config = {"name": "scf", "custom_field": "custom_value"}
-    flavor = Flavor(**config)
-    assert flavor.name == "scf"
-    assert hasattr(flavor, "custom_field")

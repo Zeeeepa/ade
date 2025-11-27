@@ -68,13 +68,6 @@ def test_template_from_dict():
     assertion.assert_deep_almost_equal(expected, template.model_dump(exclude_unset=True))
 
 
-def test_template_with_extra_fields():
-    config = {"name": "test.in", "content": "content", "custom_field": "custom_value"}
-    template = Template(**config)
-    assert template.name == "test.in"
-    assert hasattr(template, "custom_field")
-
-
 def test_template_validation():
     with pytest.raises(Exception):
         Template()

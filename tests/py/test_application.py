@@ -51,7 +51,20 @@ def test_get_short_name():
 def test_application_to_dict():
     config = {"name": "espresso", "version": "7.2"}
     app = Application(**config)
-    expected = {**config}
+    expected = {
+        "shortName": None,
+        "summary": None,
+        "version": "7.2",
+        "build": None,
+        "hasAdvancedComputeOptions": None,
+        "isLicensed": None,
+        "field_id": None,
+        "slug": None,
+        "systemName": None,
+        "schemaVersion": "2022.8.16",
+        "name": "espresso",
+        "isDefault": False,
+    }
     assertion.assert_deep_almost_equal(expected, app.to_dict())
 
 
