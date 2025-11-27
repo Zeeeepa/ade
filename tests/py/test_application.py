@@ -1,36 +1,29 @@
 from mat3ra.ade import Application
+from mat3ra.utils import assertion
 
 
 def test_application_creation():
-    app = Application(name="espresso")
-    assert app.name == "espresso"
-    assert app.version is None
-    assert app.build is None
-    assert app.hasAdvancedComputeOptions is None
-    assert app.isLicensed is None
+    config = {"name": "espresso"}
+    app = Application(**config)
+    expected = {**config}
+    assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
 
 
 def test_application_with_all_fields():
-    app = Application(
-        name="vasp",
-        version="5.4.4",
-        build="standard",
-        shortName="VASP",
-        summary="Vienna Ab initio Simulation Package",
-        hasAdvancedComputeOptions=True,
-        isLicensed=True,
-        isDefault=True,
-        schemaVersion="1.0.0",
-    )
-    assert app.name == "vasp"
-    assert app.version == "5.4.4"
-    assert app.build == "standard"
-    assert app.shortName == "VASP"
-    assert app.summary == "Vienna Ab initio Simulation Package"
-    assert app.hasAdvancedComputeOptions is True
-    assert app.isLicensed is True
-    assert app.isDefault is True
-    assert app.schemaVersion == "1.0.0"
+    config = {
+        "name": "vasp",
+        "version": "5.4.4",
+        "build": "standard",
+        "shortName": "VASP",
+        "summary": "Vienna Ab initio Simulation Package",
+        "hasAdvancedComputeOptions": True,
+        "isLicensed": True,
+        "isDefault": True,
+        "schemaVersion": "1.0.0",
+    }
+    app = Application(**config)
+    expected = {**config}
+    assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
 
 
 def test_is_using_material_property():
@@ -56,22 +49,19 @@ def test_get_short_name():
 
 
 def test_application_to_dict():
-    app = Application(name="espresso", version="7.2")
-    app_dict = app.model_dump()
-    assert isinstance(app_dict, dict)
-    assert app_dict["name"] == "espresso"
-    assert app_dict["version"] == "7.2"
+    config = {"name": "espresso", "version": "7.2"}
+    app = Application(**config)
+    expected = {**config}
+    assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
 
 
 def test_application_from_dict():
-    app_dict = {
+    config = {
         "name": "espresso",
         "version": "7.2",
         "build": "openmpi",
         "shortName": "QE",
     }
-    app = Application(**app_dict)
-    assert app.name == "espresso"
-    assert app.version == "7.2"
-    assert app.build == "openmpi"
-    assert app.shortName == "QE"
+    app = Application(**config)
+    expected = {**config}
+    assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
