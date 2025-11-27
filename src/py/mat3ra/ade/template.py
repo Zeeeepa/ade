@@ -2,13 +2,14 @@ from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
 from jinja2 import Environment
+from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.software.template import TemplateSchema
-from pydantic import ConfigDict, Field
+from pydantic import Field
 
 from .context.context_provider import ContextProvider
 
 
-class Template(TemplateSchema):
+class Template(TemplateSchema, InMemoryEntityPydantic):
     """
     Template class representing a template for application input files.
 
@@ -27,8 +28,6 @@ class Template(TemplateSchema):
     context_providers: List[ContextProvider] = Field(
         default_factory=list, description="List of context providers for this template"
     )
-
-    model_config = ConfigDict(validate_assignment=True, extra="allow")
 
     def get_rendered(self) -> str:
         return self.rendered if self.rendered is not None else self.content

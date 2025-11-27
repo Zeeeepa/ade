@@ -1,8 +1,9 @@
 from typing import List
 
+from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.software.flavor import FlavorSchema, \
     ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines
-from pydantic import ConfigDict, Field
+from pydantic import Field
 
 
 class FlavorInput(ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines):
@@ -17,7 +18,7 @@ class FlavorInput(ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines
 
     pass
 
-class Flavor(FlavorSchema):
+class Flavor(FlavorSchema, InMemoryEntityPydantic):
     """
     Flavor class representing a flavor of an executable.
 
@@ -38,4 +39,3 @@ class Flavor(FlavorSchema):
 
     input: List[FlavorInput] = Field(default_factory=list, description="Input templates for this flavor")
 
-    model_config = ConfigDict(validate_assignment=True, extra="allow")

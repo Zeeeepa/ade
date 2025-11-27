@@ -1,8 +1,8 @@
+from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.software.application import ApplicationSchemaBase
-from pydantic import ConfigDict
 
 
-class Application(ApplicationSchemaBase):
+class Application(ApplicationSchemaBase, InMemoryEntityPydantic):
     """
     Application class representing a software application.
 
@@ -26,4 +26,3 @@ class Application(ApplicationSchemaBase):
     def get_short_name(self) -> str:
         return self.shortName if self.shortName else self.name
 
-    model_config = ConfigDict(validate_assignment=True, extra="allow")

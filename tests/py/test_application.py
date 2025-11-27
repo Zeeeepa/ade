@@ -52,7 +52,7 @@ def test_application_to_dict():
     config = {"name": "espresso", "version": "7.2"}
     app = Application(**config)
     expected = {**config}
-    assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
+    assertion.assert_deep_almost_equal(expected, app.to_dict())
 
 
 def test_application_from_dict():

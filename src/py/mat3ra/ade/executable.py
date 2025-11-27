@@ -1,8 +1,8 @@
+from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.software.executable import ExecutableSchema
-from pydantic import ConfigDict
 
 
-class Executable(ExecutableSchema):
+class Executable(ExecutableSchema, InMemoryEntityPydantic):
     """
     Executable class representing an executable of an application.
 
@@ -18,4 +18,4 @@ class Executable(ExecutableSchema):
         results: Names of the results for this calculation
     """
 
-    model_config = ConfigDict(validate_assignment=True, extra="allow")
+    pass
