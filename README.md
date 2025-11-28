@@ -34,27 +34,6 @@ For development:
 git clone https://github.com/Exabyte-io/ade.git
 ```
 
-## Python Usage
-
-The Python implementation provides Pydantic-based classes for Application, Executable, Flavor, and Template:
-
-```python
-from mat3ra.ade import Application, Executable, Flavor, Template
-
-# Create an application
-app = Application(
-    name="espresso",
-    version="7.2",
-    short_name="QE"
-)
-
-# Create an executable
-executable = Executable(
-    name="pw.x",
-    application_id=["espresso"]
-)
-
-```
 
 ## Contributions
 
