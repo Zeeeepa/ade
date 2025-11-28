@@ -54,7 +54,6 @@ executable = Executable(
     application_id=["espresso"]
 )
 
-# See examples/python_usage.py for more examples
 ```
 
 ## Contributions
