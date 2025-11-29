@@ -1,9 +1,10 @@
 from typing import Any, Dict, Optional
 
+from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.context_provider import ContextProviderSchema
 
 
-class ContextProvider(ContextProviderSchema):
+class ContextProvider(ContextProviderSchema, InMemoryEntityPydantic):
     """
     Context provider for a template.
 

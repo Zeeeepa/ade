@@ -3,6 +3,29 @@ from mat3ra.ade import ContextProvider, Template
 from mat3ra.esse.models.context_provider import Name
 from mat3ra.utils import assertion
 
+CONTEXT_PROVIDER_DEFAULT_FIELDS = {
+    "domain": None,
+    "entityName": None,
+    "data": None,
+    "extraData": None,
+    "isEdited": None,
+    "context": None,
+}
+
+TEMPLATE_DEFAULT_FIELDS = {
+    "rendered": None,
+    "applicationName": None,
+    "applicationVersion": None,
+    "executableName": None,
+    "contextProviders": None,
+    "context_providers": [],
+    "isManuallyChanged": None,
+    "schemaVersion": "2022.8.16",
+    "systemName": None,
+    "slug": None,
+    "field_id": None,
+}
+
 
 def test_template_creation():
     config = {
@@ -10,8 +33,11 @@ def test_template_creation():
         "content": "&CONTROL\n  calculation='scf'\n/",
     }
     template = Template(**config)
-    expected = {**config}
-    assertion.assert_deep_almost_equal(expected, template.model_dump(exclude_unset=True))
+    expected = {
+        **config,
+        **TEMPLATE_DEFAULT_FIELDS,
+    }
+    assertion.assert_deep_almost_equal(expected, template.to_dict())
 
 
 def test_template_with_all_fields():
@@ -28,10 +54,21 @@ def test_template_with_all_fields():
     }
     template = Template(**config)
     expected = {
-        **config,
-        "context_providers": [{"name": Name.KGridFormDataManager}],
+        **TEMPLATE_DEFAULT_FIELDS,
+        "name": "pw_scf.in",
+        "content": "&CONTROL\n  calculation='scf'\n/",
+        "rendered": "&CONTROL\n  calculation='scf'\n  prefix='pwscf'\n/",
+        "applicationName": "espresso",
+        "applicationVersion": "7.2",
+        "executableName": "pw.x",
+        "context_providers": [{
+            "name": Name.KGridFormDataManager,
+            **CONTEXT_PROVIDER_DEFAULT_FIELDS,
+        }],
+        "isManuallyChanged": True,
+        "schemaVersion": "1.0.0",
     }
-    assertion.assert_deep_almost_equal(expected, template.model_dump(exclude_unset=True))
+    assertion.assert_deep_almost_equal(expected, template.to_dict())
 
 
 def test_get_rendered():
@@ -51,8 +88,11 @@ def test_template_to_dict():
         "applicationName": "espresso",
     }
     template = Template(**config)
-    expected = {**config}
-    assertion.assert_deep_almost_equal(expected, template.model_dump(exclude_unset=True))
+    expected = {
+        **TEMPLATE_DEFAULT_FIELDS,
+        **config,
+    }
+    assertion.assert_deep_almost_equal(expected, template.to_dict())
 
 
 def test_template_from_dict():
@@ -64,8 +104,18 @@ def test_template_from_dict():
         "context_providers": [{"name": Name.KGridFormDataManager}],
     }
     template = Template(**config)
-    expected = {**config}
-    assertion.assert_deep_almost_equal(expected, template.model_dump(exclude_unset=True))
+    expected = {
+        **TEMPLATE_DEFAULT_FIELDS,
+        "name": "pw_scf.in",
+        "content": "&CONTROL\n/",
+        "applicationName": "espresso",
+        "executableName": "pw.x",
+        "context_providers": [{
+            "name": Name.KGridFormDataManager,
+            **CONTEXT_PROVIDER_DEFAULT_FIELDS,
+        }],
+    }
+    assertion.assert_deep_almost_equal(expected, template.to_dict())
 
 
 def test_template_validation():
@@ -142,10 +192,14 @@ def test_get_rendered_json():
     config = {"name": "test.in", "content": "Hello {{ name }}!"}
     template = Template(**config)
     result = template.get_rendered_json({"name": "World"})
-    assert result["name"] == config["name"]
-    assert result["content"] == config["content"]
-    assert result["rendered"] == "Hello World!"
-    assert result["schemaVersion"] == "2022.8.16"
+    expected_subset = {
+        "name": "test.in",
+        "content": "Hello {{ name }}!",
+        "rendered": "Hello World!",
+        "schemaVersion": "2022.8.16"
+    }
+    for key, value in expected_subset.items():
+        assertion.assert_deep_almost_equal(value, result[key])
 
 
 def test_render_with_external_context_and_provider():
@@ -164,4 +218,5 @@ def test_render_with_external_context_and_provider():
         "isKPathFormDataManagerEdited": True
     }
     template.render(external_context)
-    assert "external_value" in template.get_rendered()
+    expected_rendered = "kpath: external_value"
+    assertion.assert_deep_almost_equal(expected_rendered, template.get_rendered())

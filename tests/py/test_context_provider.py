@@ -3,12 +3,24 @@ from mat3ra.ade import ContextProvider
 from mat3ra.esse.models.context_provider import Name
 from mat3ra.utils import assertion
 
+CONTEXT_PROVIDER_DEFAULT_FIELDS = {
+    "domain": None,
+    "entityName": None,
+    "data": None,
+    "extraData": None,
+    "isEdited": None,
+    "context": None,
+}
+
 
 def test_context_provider_creation():
     config = {"name": Name.KGridFormDataManager}
     provider = ContextProvider(**config)
-    expected = {**config}
-    assertion.assert_deep_almost_equal(expected, provider.model_dump(exclude_unset=True))
+    expected = {
+        "name": Name.KGridFormDataManager,
+        **CONTEXT_PROVIDER_DEFAULT_FIELDS,
+    }
+    assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
 def test_context_provider_validation():
@@ -28,14 +40,17 @@ def test_context_provider_full_creation():
     }
     provider = ContextProvider(**config)
     expected = {**config}
-    assertion.assert_deep_almost_equal(expected, provider.model_dump(exclude_unset=True))
+    assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
 def test_context_provider_default_values():
     config = {"name": Name.KGridFormDataManager}
     provider = ContextProvider(**config)
-    expected = {**config}
-    assertion.assert_deep_almost_equal(expected, provider.model_dump(exclude_unset=True))
+    expected = {
+        "name": Name.KGridFormDataManager,
+        **CONTEXT_PROVIDER_DEFAULT_FIELDS,
+    }
+    assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
 def test_context_provider_extra_data_key():
@@ -75,9 +90,12 @@ def test_context_provider_yield_data_with_external_context():
         "KPathFormDataManagerExtraData": {"extra_override": "data"}
     }
     result = provider.yield_data_for_rendering(external_context)
-    assert result["KPathFormDataManager"] == {"override": "value"}
-    assert result["isKPathFormDataManagerEdited"] is True
-    assert result["KPathFormDataManagerExtraData"] == {"extra_override": "data"}
+    expected = {
+        "KPathFormDataManager": {"override": "value"},
+        "isKPathFormDataManagerEdited": True,
+        "KPathFormDataManagerExtraData": {"extra_override": "data"}
+    }
+    assertion.assert_deep_almost_equal(expected, result)
 
 
 def test_context_provider_yield_data_with_stored_context():
@@ -91,6 +109,9 @@ def test_context_provider_yield_data_with_stored_context():
         }
     )
     result = provider.yield_data_for_rendering()
-    assert result["KPathFormDataManager"] == {"stored": "value"}
-    assert result["isKPathFormDataManagerEdited"] is True
+    expected = {
+        "KPathFormDataManager": {"stored": "value"},
+        "isKPathFormDataManagerEdited": True
+    }
+    assertion.assert_deep_almost_equal(expected, result)
 
