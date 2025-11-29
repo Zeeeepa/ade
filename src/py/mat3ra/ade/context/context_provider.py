@@ -8,13 +8,6 @@ class ContextProvider(ContextProviderSchema, InMemoryEntityPydantic):
     """
     Context provider for a template.
 
-    - user edits the corresponding property, eg. "kpath"
-    - isKpathEdited is set to True
-    - context property is updated for the parent entity (eg. Unit) in a way that persists in Redux state
-    - new entity inherits the "data" through "context" field in config
-    - extraData field is used to store any other data that should be passed from one instance of provider
-      to next one, for example data about material to track when it is changed.
-
     Attributes:
         name: The name of this item (required)
         domain: Domain of the context provider
