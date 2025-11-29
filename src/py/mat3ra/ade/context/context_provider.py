@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from mat3ra.esse.models.context_provider import ContextProviderSchema
 
@@ -44,15 +44,45 @@ class ContextProvider(ContextProviderSchema):
     def is_subworkflow_context_provider(self) -> bool:
         return self.entityName == "subworkflow"
 
-    def yield_data(self) -> Dict[str, Any]:
-        result = {
-            self.name_str: self.data,
-            self.is_edited_key: self.isEdited,
-        }
-        if self.extraData:
-            result[self.extra_data_key] = self.extraData
+    def _get_data_from_context(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        if not context:
+            return {}
+        data = context.get(self.name_str)
+        is_edited = context.get(self.is_edited_key)
+        extra_data = context.get(self.extra_data_key)
+        result = {}
+        if data is not None:
+            result["data"] = data
+        if is_edited is not None:
+            result["isEdited"] = is_edited
+        if extra_data is not None:
+            result["extraData"] = extra_data
         return result
 
-    def yield_data_for_rendering(self) -> Dict[str, Any]:
-        return self.yield_data()
+    def _get_effective_data(self, context: Optional[Dict[str, Any]] = None) -> Any:
+        context_data = self._get_data_from_context(context or self.context)
+        return context_data.get("data", self.data)
+
+    def _get_effective_is_edited(self, context: Optional[Dict[str, Any]] = None) -> bool:
+        context_data = self._get_data_from_context(context or self.context)
+        return context_data.get("isEdited", self.isEdited)
+
+    def _get_effective_extra_data(self, context: Optional[Dict[str, Any]] = None) -> Optional[Any]:
+        context_data = self._get_data_from_context(context or self.context)
+        return context_data.get("extraData", self.extraData)
+
+    def yield_data(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        data = self._get_effective_data(context)
+        is_edited = self._get_effective_is_edited(context)
+        extra_data = self._get_effective_extra_data(context)
+        result = {
+            self.name_str: data,
+            self.is_edited_key: is_edited,
+        }
+        if extra_data:
+            result[self.extra_data_key] = extra_data
+        return result
+
+    def yield_data_for_rendering(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        return self.yield_data(context)
 

@@ -1,7 +1,8 @@
+import json
 from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
-from jinja2 import Environment
+from jinja2 import Environment, TemplateError
 from mat3ra.code.entity import InMemoryEntityPydantic
 from mat3ra.esse.models.software.template import TemplateSchema
 from pydantic import Field
@@ -58,7 +59,7 @@ class Template(TemplateSchema, InMemoryEntityPydantic):
     ) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
         for provider in self.context_providers:
-            context = provider.yield_data_for_rendering()
+            context = provider.yield_data_for_rendering(provider_context)
             for key, value in context.items():
                 if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                     result[key] = {**result[key], **value}
@@ -83,14 +84,12 @@ class Template(TemplateSchema, InMemoryEntityPydantic):
                 template = env.from_string(self.content)
                 cleaned_context = self._clean_rendering_context(rendering_context)
                 rendered = template.render(cleaned_context)
-                if not self.isManuallyChanged:
-                    self.rendered = rendered or self.content
-            except Exception as e:
+                self.rendered = rendered or self.content
+            except TemplateError as e:
                 print(f"Template is not compiled: {e}")
                 print(f"content: {self.content}")
                 print(f"_clean_rendering_context: {self._clean_rendering_context(rendering_context)}")
 
     def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         self.render(context)
-        return self.model_dump()
-
+        return json.loads( self.to_json())

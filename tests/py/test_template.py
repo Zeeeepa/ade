@@ -146,3 +146,22 @@ def test_get_rendered_json():
     assert result["content"] == config["content"]
     assert result["rendered"] == "Hello World!"
     assert result["schemaVersion"] == "2022.8.16"
+
+
+def test_render_with_external_context_and_provider():
+    from mat3ra.esse.models.context_provider import Name
+    provider = ContextProvider(
+        name=Name.KPathFormDataManager,
+        data={"default": "value"}
+    )
+    template = Template(
+        name="test_template.in",
+        content="kpath: {{ KPathFormDataManager.key }}"
+    )
+    template.add_context_provider(provider)
+    external_context = {
+        "KPathFormDataManager": {"key": "external_value"},
+        "isKPathFormDataManagerEdited": True
+    }
+    template.render(external_context)
+    assert "external_value" in template.get_rendered()

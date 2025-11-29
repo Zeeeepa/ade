@@ -60,3 +60,37 @@ def test_context_provider_is_subworkflow_context_provider():
     assert unit_provider.is_subworkflow_context_provider is False
     subworkflow_provider = ContextProvider(name=Name.KGridFormDataManager, entityName="subworkflow")
     assert subworkflow_provider.is_subworkflow_context_provider is True
+
+
+def test_context_provider_yield_data_with_external_context():
+    provider = ContextProvider(
+        name=Name.KPathFormDataManager,
+        data={"default": "value"},
+        isEdited=False,
+        extraData={"extra": "data"}
+    )
+    external_context = {
+        "KPathFormDataManager": {"override": "value"},
+        "isKPathFormDataManagerEdited": True,
+        "KPathFormDataManagerExtraData": {"extra_override": "data"}
+    }
+    result = provider.yield_data_for_rendering(external_context)
+    assert result["KPathFormDataManager"] == {"override": "value"}
+    assert result["isKPathFormDataManagerEdited"] is True
+    assert result["KPathFormDataManagerExtraData"] == {"extra_override": "data"}
+
+
+def test_context_provider_yield_data_with_stored_context():
+    provider = ContextProvider(
+        name=Name.KPathFormDataManager,
+        data={"default": "value"},
+        isEdited=False,
+        context={
+            "KPathFormDataManager": {"stored": "value"},
+            "isKPathFormDataManagerEdited": True
+        }
+    )
+    result = provider.yield_data_for_rendering()
+    assert result["KPathFormDataManager"] == {"stored": "value"}
+    assert result["isKPathFormDataManagerEdited"] is True
+
