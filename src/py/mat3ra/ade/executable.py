@@ -1,8 +1,8 @@
-from mat3ra.code.entity import InMemoryEntityPydantic
+from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.executable import ExecutableSchema
 
 
-class Executable(ExecutableSchema, InMemoryEntityPydantic):
+class Executable(ExecutableSchema, InMemoryEntitySnakeCase):
     """
     Executable class representing an executable of an application.
 

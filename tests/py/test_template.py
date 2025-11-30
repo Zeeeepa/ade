@@ -17,8 +17,7 @@ TEMPLATE_DEFAULT_FIELDS = {
     "applicationName": None,
     "applicationVersion": None,
     "executableName": None,
-    "contextProviders": None,
-    "context_providers": [],
+    "contextProviders": [],
     "isManuallyChanged": None,
     "schemaVersion": "2022.8.16",
     "systemName": None,
@@ -48,7 +47,7 @@ def test_template_with_all_fields():
         "applicationName": "espresso",
         "applicationVersion": "7.2",
         "executableName": "pw.x",
-        "context_providers": [ContextProvider(name=Name.KGridFormDataManager)],
+        "contextProviders": [ContextProvider(name=Name.KGridFormDataManager)],
         "isManuallyChanged": True,
         "schemaVersion": "1.0.0",
     }
@@ -61,7 +60,7 @@ def test_template_with_all_fields():
         "applicationName": "espresso",
         "applicationVersion": "7.2",
         "executableName": "pw.x",
-        "context_providers": [{
+        "contextProviders": [{
             "name": Name.KGridFormDataManager,
             **CONTEXT_PROVIDER_DEFAULT_FIELDS,
         }],
@@ -101,7 +100,7 @@ def test_template_from_dict():
         "content": "&CONTROL\n/",
         "applicationName": "espresso",
         "executableName": "pw.x",
-        "context_providers": [{"name": Name.KGridFormDataManager}],
+        "contextProviders": [{"name": Name.KGridFormDataManager}],
     }
     template = Template(**config)
     expected = {
@@ -110,7 +109,7 @@ def test_template_from_dict():
         "content": "&CONTROL\n/",
         "applicationName": "espresso",
         "executableName": "pw.x",
-        "context_providers": [{
+        "contextProviders": [{
             "name": Name.KGridFormDataManager,
             **CONTEXT_PROVIDER_DEFAULT_FIELDS,
         }],
@@ -148,18 +147,18 @@ def test_add_context_provider():
     template = Template(**config)
     provider = ContextProvider(name=Name.KGridFormDataManager)
     template.add_context_provider(provider)
-    assert len(template.context_providers) == 1
-    assert template.context_providers[0].name == Name.KGridFormDataManager
+    assert len(template.contextProviders) == 1
+    assert template.contextProviders[0].name == Name.KGridFormDataManager
 
 
 def test_remove_context_provider():
     provider1 = ContextProvider(name=Name.KGridFormDataManager, domain="test")
     provider2 = ContextProvider(name=Name.KPathFormDataManager, domain="test")
-    config = {"name": "test.in", "content": "content", "context_providers": [provider1, provider2]}
+    config = {"name": "test.in", "content": "content", "contextProviders": [provider1, provider2]}
     template = Template(**config)
     template.remove_context_provider(provider1)
-    assert len(template.context_providers) == 1
-    assert template.context_providers[0].name == Name.KPathFormDataManager
+    assert len(template.contextProviders) == 1
+    assert template.contextProviders[0].name == Name.KPathFormDataManager
 
 
 def test_render():
@@ -174,7 +173,7 @@ def test_render_with_context_provider():
     config = {
         "name": "test.in",
         "content": "Value is {{ KGridFormDataManager.value }}",
-        "context_providers": [provider],
+        "contextProviders": [provider],
     }
     template = Template(**config)
     template.render()

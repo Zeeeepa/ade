@@ -3,14 +3,14 @@ from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
 from jinja2 import Environment, TemplateError
-from mat3ra.code.entity import InMemoryEntityPydantic
+from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.template import TemplateSchema
 from pydantic import Field
 
 from .context.context_provider import ContextProvider
 
 
-class Template(TemplateSchema, InMemoryEntityPydantic):
+class Template(TemplateSchema, InMemoryEntitySnakeCase):
     """
     Template class representing a template for application input files.
 
@@ -26,9 +26,17 @@ class Template(TemplateSchema, InMemoryEntityPydantic):
         schemaVersion: Entity's schema version
     """
 
-    context_providers: List[ContextProvider] = Field(
+    contextProviders: List[ContextProvider] = Field(
         default_factory=list, description="List of context providers for this template"
     )
+
+    @property
+    def context_providers(self) -> List[ContextProvider]:
+        return self.contextProviders
+
+    @context_providers.setter
+    def context_providers(self, value: List[ContextProvider]) -> None:
+        self.contextProviders = value
 
     def get_rendered(self) -> str:
         return self.rendered if self.rendered is not None else self.content

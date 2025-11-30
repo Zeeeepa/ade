@@ -1,6 +1,6 @@
 from typing import List
 
-from mat3ra.code.entity import InMemoryEntityPydantic
+from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.flavor import FlavorSchema, \
     ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines
 from pydantic import Field
@@ -18,7 +18,7 @@ class FlavorInput(ExecutionUnitInputIdItemSchemaForPhysicsBasedSimulationEngines
 
     pass
 
-class Flavor(FlavorSchema, InMemoryEntityPydantic):
+class Flavor(FlavorSchema, InMemoryEntitySnakeCase):
     """
     Flavor class representing a flavor of an executable.
 
