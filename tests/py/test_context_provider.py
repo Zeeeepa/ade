@@ -12,12 +12,60 @@ CONTEXT_PROVIDER_DEFAULT_FIELDS = {
     "context": None,
 }
 
+CONTEXT_PROVIDER_MINIMAL_CONFIG = {
+    "name": Name.KGridFormDataManager,
+}
+
+CONTEXT_PROVIDER_FULL_CONFIG = {
+    "name": Name.KGridFormDataManager,
+    "domain": "test_domain",
+    "entityName": "subworkflow",
+    "data": {"key": "value"},
+    "extraData": {"extraKey": "extraValue"},
+    "isEdited": True,
+    "context": {"contextKey": "contextValue"},
+}
+
+CONTEXT_PROVIDER_WITH_DEFAULT_DATA = {
+    "name": Name.KPathFormDataManager,
+    "data": {"default": "value"},
+    "isEdited": False,
+    "extraData": {"extra": "data"},
+}
+
+EXTERNAL_CONTEXT_OVERRIDE = {
+    "KPathFormDataManager": {"override": "value"},
+    "isKPathFormDataManagerEdited": True,
+    "KPathFormDataManagerExtraData": {"extra_override": "data"},
+}
+
+EXPECTED_YIELD_DATA_WITH_EXTERNAL = {
+    "KPathFormDataManager": {"override": "value"},
+    "isKPathFormDataManagerEdited": True,
+    "KPathFormDataManagerExtraData": {"extra_override": "data"},
+}
+
+CONTEXT_PROVIDER_WITH_STORED_CONTEXT = {
+    "name": Name.KPathFormDataManager,
+    "data": {"default": "value"},
+    "isEdited": False,
+    "context": {
+        "KPathFormDataManager": {"stored": "value"},
+        "isKPathFormDataManagerEdited": True,
+    },
+}
+
+EXPECTED_YIELD_DATA_WITH_STORED = {
+    "KPathFormDataManager": {"stored": "value"},
+    "isKPathFormDataManagerEdited": True,
+}
+
 
 def test_context_provider_creation():
-    config = {"name": Name.KGridFormDataManager}
+    config = CONTEXT_PROVIDER_MINIMAL_CONFIG
     provider = ContextProvider(**config)
     expected = {
-        "name": Name.KGridFormDataManager,
+        **config,
         **CONTEXT_PROVIDER_DEFAULT_FIELDS,
     }
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
@@ -29,25 +77,17 @@ def test_context_provider_validation():
 
 
 def test_context_provider_full_creation():
-    config = {
-        "name": Name.KGridFormDataManager,
-        "domain": "test_domain",
-        "entityName": "subworkflow",
-        "data": {"key": "value"},
-        "extraData": {"extraKey": "extraValue"},
-        "isEdited": True,
-        "context": {"contextKey": "contextValue"},
-    }
+    config = CONTEXT_PROVIDER_FULL_CONFIG
     provider = ContextProvider(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
 def test_context_provider_default_values():
-    config = {"name": Name.KGridFormDataManager}
+    config = CONTEXT_PROVIDER_MINIMAL_CONFIG
     provider = ContextProvider(**config)
     expected = {
-        "name": Name.KGridFormDataManager,
+        **config,
         **CONTEXT_PROVIDER_DEFAULT_FIELDS,
     }
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
@@ -78,40 +118,16 @@ def test_context_provider_is_subworkflow_context_provider():
 
 
 def test_context_provider_yield_data_with_external_context():
-    provider = ContextProvider(
-        name=Name.KPathFormDataManager,
-        data={"default": "value"},
-        isEdited=False,
-        extraData={"extra": "data"}
-    )
-    external_context = {
-        "KPathFormDataManager": {"override": "value"},
-        "isKPathFormDataManagerEdited": True,
-        "KPathFormDataManagerExtraData": {"extra_override": "data"}
-    }
+    provider = ContextProvider(**CONTEXT_PROVIDER_WITH_DEFAULT_DATA)
+    external_context = EXTERNAL_CONTEXT_OVERRIDE
     result = provider.yield_data_for_rendering(external_context)
-    expected = {
-        "KPathFormDataManager": {"override": "value"},
-        "isKPathFormDataManagerEdited": True,
-        "KPathFormDataManagerExtraData": {"extra_override": "data"}
-    }
+    expected = EXPECTED_YIELD_DATA_WITH_EXTERNAL
     assertion.assert_deep_almost_equal(expected, result)
 
 
 def test_context_provider_yield_data_with_stored_context():
-    provider = ContextProvider(
-        name=Name.KPathFormDataManager,
-        data={"default": "value"},
-        isEdited=False,
-        context={
-            "KPathFormDataManager": {"stored": "value"},
-            "isKPathFormDataManagerEdited": True
-        }
-    )
+    provider = ContextProvider(**CONTEXT_PROVIDER_WITH_STORED_CONTEXT)
     result = provider.yield_data_for_rendering()
-    expected = {
-        "KPathFormDataManager": {"stored": "value"},
-        "isKPathFormDataManagerEdited": True
-    }
+    expected = EXPECTED_YIELD_DATA_WITH_STORED
     assertion.assert_deep_almost_equal(expected, result)
 

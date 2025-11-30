@@ -1,26 +1,57 @@
 from mat3ra.ade import Application
 from mat3ra.utils import assertion
 
+APPLICATION_DEFAULT_FIELDS = {
+    "shortName": None,
+    "summary": None,
+    "build": None,
+    "hasAdvancedComputeOptions": None,
+    "isLicensed": None,
+    "field_id": None,
+    "slug": None,
+    "systemName": None,
+    "schemaVersion": "2022.8.16",
+    "isDefault": False,
+}
+
+APPLICATION_MINIMAL_CONFIG = {
+    "name": "espresso",
+}
+
+APPLICATION_FULL_CONFIG = {
+    "name": "vasp",
+    "version": "5.4.4",
+    "build": "standard",
+    "shortName": "VASP",
+    "summary": "Vienna Ab initio Simulation Package",
+    "hasAdvancedComputeOptions": True,
+    "isLicensed": True,
+    "isDefault": True,
+    "schemaVersion": "1.0.0",
+}
+
+APPLICATION_WITH_VERSION_CONFIG = {
+    "name": "espresso",
+    "version": "7.2",
+}
+
+APPLICATION_FROM_DICT_CONFIG = {
+    "name": "espresso",
+    "version": "7.2",
+    "build": "openmpi",
+    "shortName": "QE",
+}
+
 
 def test_application_creation():
-    config = {"name": "espresso"}
+    config = APPLICATION_MINIMAL_CONFIG
     app = Application(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
 
 
 def test_application_with_all_fields():
-    config = {
-        "name": "vasp",
-        "version": "5.4.4",
-        "build": "standard",
-        "shortName": "VASP",
-        "summary": "Vienna Ab initio Simulation Package",
-        "hasAdvancedComputeOptions": True,
-        "isLicensed": True,
-        "isDefault": True,
-        "schemaVersion": "1.0.0",
-    }
+    config = APPLICATION_FULL_CONFIG
     app = Application(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
@@ -49,32 +80,17 @@ def test_get_short_name():
 
 
 def test_application_to_dict():
-    config = {"name": "espresso", "version": "7.2"}
+    config = APPLICATION_WITH_VERSION_CONFIG
     app = Application(**config)
     expected = {
-        "shortName": None,
-        "summary": None,
-        "version": "7.2",
-        "build": None,
-        "hasAdvancedComputeOptions": None,
-        "isLicensed": None,
-        "field_id": None,
-        "slug": None,
-        "systemName": None,
-        "schemaVersion": "2022.8.16",
-        "name": "espresso",
-        "isDefault": False,
+        **APPLICATION_DEFAULT_FIELDS,
+        **config,
     }
     assertion.assert_deep_almost_equal(expected, app.to_dict())
 
 
 def test_application_from_dict():
-    config = {
-        "name": "espresso",
-        "version": "7.2",
-        "build": "openmpi",
-        "shortName": "QE",
-    }
+    config = APPLICATION_FROM_DICT_CONFIG
     app = Application(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, app.model_dump(exclude_unset=True))
