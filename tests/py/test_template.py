@@ -154,6 +154,29 @@ EXPECTED_MERGED_DATA_NON_OVERLAPPING = {
 
 EXPECTED_MERGED_DATA_OVERLAPPING_DICTS = {
     "KGridFormDataManager": {"spacing": 0.3, "shift": [0, 0, 0], "density": 10},
+    "isKGridFormDataManagerEdited": None,
+}
+
+TEMPLATE_WITH_DICT_MERGE_PROVIDERS = {
+    "name": "test.in",
+    "content": "content",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"nested": {"key1": "value1", "key2": "value2"}}),
+        ContextProvider(name=Name.KGridFormDataManager, data={"nested": {"key2": "updated", "key3": "value3"}}),
+    ],
+}
+
+EXPECTED_DICT_MERGE_RESULT = {
+    "KGridFormDataManager": {"nested": {"key2": "updated", "key3": "value3"}}
+}
+
+TEMPLATE_WITH_DIFFERENT_PROVIDERS = {
+    "name": "test.in",
+    "content": "content",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"value": "first"}),
+        ContextProvider(name=Name.KPathFormDataManager, data={"value": "second"}),
+    ],
 }
 
 
@@ -321,3 +344,34 @@ def test_template_with_extra_fields():
     template = Template(**config)
     assert template.name == "test.in"
     assert not hasattr(template, "custom_field")
+
+
+@pytest.mark.parametrize(
+    "config,provider_context,expected",
+    [
+        (
+            TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG,
+            None,
+            {"KGridFormDataManager": {"kgrid": "4 4 4"}, "isKGridFormDataManagerEdited": True},
+        ),
+        (
+            TEMPLATE_WITH_MULTIPLE_PROVIDERS_NON_OVERLAPPING,
+            None,
+            EXPECTED_MERGED_DATA_NON_OVERLAPPING,
+        ),
+        (
+            TEMPLATE_WITH_MULTIPLE_PROVIDERS_OVERLAPPING_DICTS,
+            None,
+            EXPECTED_MERGED_DATA_OVERLAPPING_DICTS,
+        ),
+        (
+            TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG,
+            PROVIDER_CONTEXT_FOR_YIELD,
+            {"KGridFormDataManager": {"override": "value"}, "isKGridFormDataManagerEdited": True},
+        ),
+    ]
+)
+def test_get_data_from_providers_for_rendering_context(config, provider_context, expected):
+    template = Template(**config)
+    result = template.get_data_from_providers_for_rendering_context(provider_context)
+    assertion.assert_deep_almost_equal(expected, result)
