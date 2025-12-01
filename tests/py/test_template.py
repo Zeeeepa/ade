@@ -1,3 +1,4 @@
+import json
 import pytest
 from mat3ra.ade import ContextProvider, Template
 from mat3ra.esse.models.context_provider import Name
@@ -159,7 +160,7 @@ EXTERNAL_CONTEXT_KPATH = {
 
 EXPECTED_EXTERNAL_CONTEXT_RENDER = "kpath: external_value"
 
-EXPECTED_RENDERED_JSON = {
+EXPECTED_RENDERED_DICT = {
     "name": "test.in",
     "content": "Hello {{ name }}!",
     "rendered": "Hello World!",
@@ -253,13 +254,27 @@ def test_render(config, context, expected_rendered):
 @pytest.mark.parametrize(
     "config,context,expected",
     [
-        (CONFIG_JINJA_SIMPLE, CONTEXT_JINJA_SIMPLE, EXPECTED_RENDERED_JSON),
+        (CONFIG_JINJA_SIMPLE, CONTEXT_JINJA_SIMPLE, EXPECTED_RENDERED_DICT),
     ],
 )
-def test_get_rendered_json(config, context, expected):
+def test_get_rendered_dict(config, context, expected):
+    template = Template(**config)
+    result = template.get_rendered_dict(context)
+    assertion.assert_deep_almost_equal(expected, result)
+
+
+@pytest.mark.parametrize(
+    "config,context,expected_dict",
+    [
+        (CONFIG_JINJA_SIMPLE, CONTEXT_JINJA_SIMPLE, EXPECTED_RENDERED_DICT),
+    ],
+)
+def test_get_rendered_json(config, context, expected_dict):
     template = Template(**config)
     result = template.get_rendered_json(context)
-    assertion.assert_deep_almost_equal(expected, result)
+    assert isinstance(result, str)
+    result_dict = json.loads(result)
+    assertion.assert_deep_almost_equal(expected_dict, result_dict)
 
 
 @pytest.mark.parametrize(

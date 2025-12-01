@@ -93,6 +93,10 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
             self.rendered = rendered or self.content
 
 
-    def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def get_rendered_dict(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         self.render(context)
-        return json.loads( self.to_json())
+        return self.to_dict()
+    
+    def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> str:
+        self.render(context)
+        return self.to_json()
