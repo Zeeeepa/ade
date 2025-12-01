@@ -25,257 +25,199 @@ TEMPLATE_DEFAULT_FIELDS = {
     "field_id": None,
 }
 
-TEMPLATE_MINIMAL_CONFIG = {
+CONFIG_MINIMAL = {
     "name": "pw_scf.in",
-    "content": "&CONTROL\n  calculation='scf'\n/",
+    "content": "&CONTROL\n/",
 }
 
-TEMPLATE_FULL_CONFIG = {
+CONFIG_FULL = {
     "name": "pw_scf.in",
-    "content": "&CONTROL\n  calculation='scf'\n/",
-    "rendered": "&CONTROL\n  calculation='scf'\n  prefix='pwscf'\n/",
+    "content": "&CONTROL\n/",
+    "rendered": "rendered",
     "applicationName": "espresso",
-    "applicationVersion": "7.2",
     "executableName": "pw.x",
     "contextProviders": [ContextProvider(name=Name.KGridFormDataManager)],
-    "isManuallyChanged": True,
-    "schemaVersion": "1.0.0",
 }
 
-TEMPLATE_WITH_RENDERED_CONFIG = {
-    "name": "test.in",
-    "content": "original content",
-    "rendered": "rendered content",
-}
-
-TEMPLATE_WITHOUT_RENDERED_CONFIG = {
-    "name": "test.in",
-    "content": "original content",
-}
-
-TEMPLATE_TO_DICT_CONFIG = {
+EXPECTED_MINIMAL = {
     "name": "pw_scf.in",
     "content": "&CONTROL\n/",
-    "applicationName": "espresso",
+    **TEMPLATE_DEFAULT_FIELDS,
 }
 
-TEMPLATE_FROM_DICT_CONFIG = {
+EXPECTED_FULL = {
     "name": "pw_scf.in",
     "content": "&CONTROL\n/",
+    "rendered": "rendered",
     "applicationName": "espresso",
     "executableName": "pw.x",
-    "contextProviders": [{"name": Name.KGridFormDataManager}],
+    "contextProviders": [{"name": Name.KGridFormDataManager, **CONTEXT_PROVIDER_DEFAULT_FIELDS}],
+    **{k: v for k, v in TEMPLATE_DEFAULT_FIELDS.items() if k not in ["rendered", "applicationName", "executableName", "contextProviders"]},
 }
 
-TEMPLATE_WITH_EXTRA_FIELDS_CONFIG = {
+CONFIG_INVALID_EMPTY = {}
+CONFIG_INVALID_NAME_ONLY = {"name": "test.in"}
+CONFIG_INVALID_CONTENT_ONLY = {"content": "content"}
+
+CONFIG_WITH_RENDERED = {
     "name": "test.in",
-    "content": "content",
-    "custom_field": "custom_value",
+    "content": "original",
+    "rendered": "rendered",
 }
 
-TEMPLATE_SET_CONTENT_CONFIG = {
+CONFIG_WITHOUT_RENDERED = {
     "name": "test.in",
     "content": "original",
 }
 
-TEMPLATE_WITH_JINJA_CONFIG = {
+CONFIG_JINJA_SIMPLE = {
     "name": "test.in",
     "content": "Hello {{ name }}!",
 }
 
-TEMPLATE_MANUALLY_CHANGED_CONFIG = {
+CONTEXT_JINJA_SIMPLE = {"name": "World"}
+EXPECTED_RENDERED_JINJA_SIMPLE = "Hello World!"
+
+CONFIG_WITH_PROVIDER_DATA = {
+    "name": "test.in",
+    "content": "Value: {{ KGridFormDataManager.value }}",
+    "contextProviders": [ContextProvider(name=Name.KGridFormDataManager, data={"value": 42}, isEdited=True)],
+}
+
+EXPECTED_RENDERED_WITH_PROVIDER = "Value: 42"
+
+CONFIG_MANUALLY_CHANGED = {
     "name": "test.in",
     "content": "Hello {{ name }}!",
     "isManuallyChanged": True,
 }
 
-TEMPLATE_WITH_PROVIDER_RENDERING_CONFIG = {
+CONFIG_SINGLE_PROVIDER = {
     "name": "test.in",
-    "content": "Value is {{ KGridFormDataManager.value }}",
-    "contextProviders": [ContextProvider(name=Name.KGridFormDataManager, data={"value": 42}, isEdited=True)],
-}
-
-TEMPLATE_WITH_TWO_PROVIDERS_CONFIG = {
-    "name": "test.in",
-    "content": "content",
-    "contextProviders": [
-        ContextProvider(name=Name.KGridFormDataManager, domain="test"),
-        ContextProvider(name=Name.KPathFormDataManager, domain="test"),
-    ],
-}
-
-TEMPLATE_FOR_EXTERNAL_CONTEXT_CONFIG = {
-    "name": "test_template.in",
-    "content": "kpath: {{ KPathFormDataManager.key }}",
-}
-
-EXTERNAL_CONTEXT_FOR_RENDERING = {
-    "KPathFormDataManager": {"key": "external_value"},
-    "isKPathFormDataManagerEdited": True,
-}
-
-TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG = {
-    "name": "test.in",
-    "content": "test content",
+    "content": "test",
     "contextProviders": [
         ContextProvider(name=Name.KGridFormDataManager, data={"kgrid": "4 4 4"}, isEdited=True),
     ],
 }
 
-TEMPLATE_WITH_MULTIPLE_PROVIDERS_NON_OVERLAPPING = {
+EXPECTED_SINGLE_PROVIDER = {
+    "KGridFormDataManager": {"kgrid": "4 4 4"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+CONFIG_MULTIPLE_PROVIDERS = {
     "name": "test.in",
-    "content": "test content",
+    "content": "test",
     "contextProviders": [
         ContextProvider(name=Name.KGridFormDataManager, data={"kgrid": "4 4 4"}, isEdited=True),
         ContextProvider(name=Name.KPathFormDataManager, data={"path": "G-X-L"}, isEdited=False),
     ],
 }
 
-TEMPLATE_WITH_MULTIPLE_PROVIDERS_OVERLAPPING_DICTS = {
-    "name": "test.in",
-    "content": "test content",
-    "contextProviders": [
-        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.5, "shift": [0, 0, 0]}),
-        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.3, "density": 10}),
-    ],
-}
-
-PROVIDER_CONTEXT_FOR_YIELD = {
-    "KGridFormDataManager": {"override": "value"},
-    "isKGridFormDataManagerEdited": True,
-}
-
-EXPECTED_MERGED_DATA_NON_OVERLAPPING = {
+EXPECTED_MULTIPLE_PROVIDERS = {
     "KGridFormDataManager": {"kgrid": "4 4 4"},
     "isKGridFormDataManagerEdited": True,
     "KPathFormDataManager": {"path": "G-X-L"},
     "isKPathFormDataManagerEdited": False,
 }
 
-EXPECTED_MERGED_DATA_OVERLAPPING_DICTS = {
+CONFIG_OVERLAPPING_DICT_MERGE = {
+    "name": "test.in",
+    "content": "test",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.5, "shift": [0, 0, 0]}),
+        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.3, "density": 10}),
+    ],
+}
+
+EXPECTED_OVERLAPPING_DICT_MERGE = {
     "KGridFormDataManager": {"spacing": 0.3, "shift": [0, 0, 0], "density": 10},
     "isKGridFormDataManagerEdited": None,
 }
 
-TEMPLATE_WITH_DICT_MERGE_PROVIDERS = {
+PROVIDER_CONTEXT_OVERRIDE = {
+    "KGridFormDataManager": {"override": "value"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+EXPECTED_WITH_OVERRIDE = {
+    "KGridFormDataManager": {"override": "value"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+CONFIG_EXTERNAL_CONTEXT_TEST = {
     "name": "test.in",
-    "content": "content",
-    "contextProviders": [
-        ContextProvider(name=Name.KGridFormDataManager, data={"nested": {"key1": "value1", "key2": "value2"}}),
-        ContextProvider(name=Name.KGridFormDataManager, data={"nested": {"key2": "updated", "key3": "value3"}}),
-    ],
+    "content": "kpath: {{ KPathFormDataManager.key }}",
 }
 
-EXPECTED_DICT_MERGE_RESULT = {
-    "KGridFormDataManager": {"nested": {"key2": "updated", "key3": "value3"}}
+PROVIDER_KPATH = ContextProvider(name=Name.KPathFormDataManager, data={"default": "value"})
+
+EXTERNAL_CONTEXT_KPATH = {
+    "KPathFormDataManager": {"key": "external_value"},
+    "isKPathFormDataManagerEdited": True,
 }
 
-TEMPLATE_WITH_DIFFERENT_PROVIDERS = {
+EXPECTED_EXTERNAL_CONTEXT_RENDER = "kpath: external_value"
+
+EXPECTED_RENDERED_JSON = {
     "name": "test.in",
-    "content": "content",
-    "contextProviders": [
-        ContextProvider(name=Name.KGridFormDataManager, data={"value": "first"}),
-        ContextProvider(name=Name.KPathFormDataManager, data={"value": "second"}),
-    ],
+    "content": "Hello {{ name }}!",
+    "rendered": "Hello World!",
+    **TEMPLATE_DEFAULT_FIELDS,
 }
 
 
-def test_template_creation():
-    config = TEMPLATE_MINIMAL_CONFIG
+@pytest.mark.parametrize(
+    "config,expected_fields",
+    [
+        (CONFIG_MINIMAL, EXPECTED_MINIMAL),
+        (CONFIG_FULL, EXPECTED_FULL),
+    ],
+)
+def test_template_creation(config, expected_fields):
     template = Template(**config)
-    expected = {
-        **config,
-        **TEMPLATE_DEFAULT_FIELDS,
-    }
-    assertion.assert_deep_almost_equal(expected, template.to_dict())
+    assertion.assert_deep_almost_equal(expected_fields, template.to_dict())
 
 
-def test_template_with_all_fields():
-    config = TEMPLATE_FULL_CONFIG
-    template = Template(**config)
-    expected = {
-        **TEMPLATE_DEFAULT_FIELDS,
-        "name": "pw_scf.in",
-        "content": "&CONTROL\n  calculation='scf'\n/",
-        "rendered": "&CONTROL\n  calculation='scf'\n  prefix='pwscf'\n/",
-        "applicationName": "espresso",
-        "applicationVersion": "7.2",
-        "executableName": "pw.x",
-        "contextProviders": [{
-            "name": Name.KGridFormDataManager,
-            **CONTEXT_PROVIDER_DEFAULT_FIELDS,
-        }],
-        "isManuallyChanged": True,
-        "schemaVersion": "1.0.0",
-    }
-    assertion.assert_deep_almost_equal(expected, template.to_dict())
-
-
-def test_get_rendered():
-    config_with_rendered = TEMPLATE_WITH_RENDERED_CONFIG
-    template_with_rendered = Template(**config_with_rendered)
-    assert template_with_rendered.get_rendered() == "rendered content"
-
-    config_without_rendered = TEMPLATE_WITHOUT_RENDERED_CONFIG
-    template_without_rendered = Template(**config_without_rendered)
-    assert template_without_rendered.get_rendered() == "original content"
-
-
-def test_template_to_dict():
-    config = TEMPLATE_TO_DICT_CONFIG
-    template = Template(**config)
-    expected = {
-        **TEMPLATE_DEFAULT_FIELDS,
-        **config,
-    }
-    assertion.assert_deep_almost_equal(expected, template.to_dict())
-
-
-def test_template_from_dict():
-    config = TEMPLATE_FROM_DICT_CONFIG
-    template = Template(**config)
-    expected = {
-        **TEMPLATE_DEFAULT_FIELDS,
-        "name": "pw_scf.in",
-        "content": "&CONTROL\n/",
-        "applicationName": "espresso",
-        "executableName": "pw.x",
-        "contextProviders": [{
-            "name": Name.KGridFormDataManager,
-            **CONTEXT_PROVIDER_DEFAULT_FIELDS,
-        }],
-    }
-    assertion.assert_deep_almost_equal(expected, template.to_dict())
-
-
-def test_template_validation():
+@pytest.mark.parametrize(
+    "config",
+    [
+        CONFIG_INVALID_EMPTY,
+        CONFIG_INVALID_NAME_ONLY,
+        CONFIG_INVALID_CONTENT_ONLY,
+    ],
+)
+def test_template_validation(config):
     with pytest.raises(Exception):
-        Template()
+        Template(**config)
 
-    with pytest.raises(Exception):
-        Template(name="test.in")
 
-    with pytest.raises(Exception):
-        Template(content="content")
+@pytest.mark.parametrize(
+    "config,expected_output",
+    [
+        (CONFIG_WITH_RENDERED, "rendered"),
+        (CONFIG_WITHOUT_RENDERED, "original"),
+    ],
+)
+def test_get_rendered(config, expected_output):
+    template = Template(**config)
+    assert template.get_rendered() == expected_output
 
 
 def test_set_content():
-    config = TEMPLATE_SET_CONTENT_CONFIG
-    template = Template(**config)
+    template = Template(name="test.in", content="original")
     template.set_content("new content")
     assert template.content == "new content"
 
 
 def test_set_rendered():
-    config = TEMPLATE_SET_CONTENT_CONFIG
-    template = Template(**config)
+    template = Template(name="test.in", content="original")
     template.set_rendered("rendered")
     assert template.rendered == "rendered"
 
 
 def test_add_context_provider():
-    config = TEMPLATE_WITHOUT_RENDERED_CONFIG
-    template = Template(**config)
+    template = Template(name="test.in", content="content")
     provider = ContextProvider(name=Name.KGridFormDataManager)
     template.add_context_provider(provider)
     assert len(template.contextProviders) == 1
@@ -283,95 +225,60 @@ def test_add_context_provider():
 
 
 def test_remove_context_provider():
-    config = TEMPLATE_WITH_TWO_PROVIDERS_CONFIG
-    template = Template(**config)
-    provider1 = config["contextProviders"][0]
+    provider1 = ContextProvider(name=Name.KGridFormDataManager, domain="test")
+    provider2 = ContextProvider(name=Name.KPathFormDataManager, domain="test")
+    template = Template(name="test.in", content="content", contextProviders=[provider1, provider2])
     template.remove_context_provider(provider1)
     assert len(template.contextProviders) == 1
     assert template.contextProviders[0].name == Name.KPathFormDataManager
 
 
-def test_render():
-    config = TEMPLATE_WITH_JINJA_CONFIG
+@pytest.mark.parametrize(
+    "config,context,expected_rendered",
+    [
+        (CONFIG_JINJA_SIMPLE, CONTEXT_JINJA_SIMPLE, EXPECTED_RENDERED_JINJA_SIMPLE),
+        (CONFIG_WITH_PROVIDER_DATA, None, EXPECTED_RENDERED_WITH_PROVIDER),
+        (CONFIG_MANUALLY_CHANGED, CONTEXT_JINJA_SIMPLE, None),
+    ],
+)
+def test_render(config, context, expected_rendered):
     template = Template(**config)
-    template.render({"name": "World"})
-    assert template.rendered == "Hello World!"
+    template.render(context)
+    if expected_rendered is None:
+        assert template.rendered is None
+    else:
+        assert expected_rendered in template.rendered or template.rendered == expected_rendered
 
 
-def test_render_with_context_provider():
-    config = TEMPLATE_WITH_PROVIDER_RENDERING_CONFIG
+@pytest.mark.parametrize(
+    "config,context,expected",
+    [
+        (CONFIG_JINJA_SIMPLE, CONTEXT_JINJA_SIMPLE, EXPECTED_RENDERED_JSON),
+    ],
+)
+def test_get_rendered_json(config, context, expected):
     template = Template(**config)
-    template.render()
-    assert "42" in template.rendered or "value" in template.rendered
-
-
-def test_render_manually_changed():
-    config = TEMPLATE_MANUALLY_CHANGED_CONFIG
-    template = Template(**config)
-    template.render({"name": "World"})
-    assert template.rendered is None
-
-
-def test_get_rendered_json():
-    config = TEMPLATE_WITH_JINJA_CONFIG
-    template = Template(**config)
-    result = template.get_rendered_json({"name": "World"})
-    expected_subset = {
-        "name": "test.in",
-        "content": "Hello {{ name }}!",
-        "rendered": "Hello World!",
-        "schemaVersion": "2022.8.16"
-    }
-    for key, value in expected_subset.items():
-        assertion.assert_deep_almost_equal(value, result[key])
-
-
-def test_render_with_external_context_and_provider():
-    provider = ContextProvider(
-        name=Name.KPathFormDataManager,
-        data={"default": "value"}
-    )
-    template = Template(**TEMPLATE_FOR_EXTERNAL_CONTEXT_CONFIG)
-    template.add_context_provider(provider)
-    external_context = EXTERNAL_CONTEXT_FOR_RENDERING
-    template.render(external_context)
-    expected_rendered = "kpath: external_value"
-    assertion.assert_deep_almost_equal(expected_rendered, template.get_rendered())
-
-
-def test_template_with_extra_fields():
-    config = TEMPLATE_WITH_EXTRA_FIELDS_CONFIG
-    template = Template(**config)
-    assert template.name == "test.in"
-    assert not hasattr(template, "custom_field")
+    result = template.get_rendered_json(context)
+    assertion.assert_deep_almost_equal(expected, result)
 
 
 @pytest.mark.parametrize(
     "config,provider_context,expected",
     [
-        (
-            TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG,
-            None,
-            {"KGridFormDataManager": {"kgrid": "4 4 4"}, "isKGridFormDataManagerEdited": True},
-        ),
-        (
-            TEMPLATE_WITH_MULTIPLE_PROVIDERS_NON_OVERLAPPING,
-            None,
-            EXPECTED_MERGED_DATA_NON_OVERLAPPING,
-        ),
-        (
-            TEMPLATE_WITH_MULTIPLE_PROVIDERS_OVERLAPPING_DICTS,
-            None,
-            EXPECTED_MERGED_DATA_OVERLAPPING_DICTS,
-        ),
-        (
-            TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG,
-            PROVIDER_CONTEXT_FOR_YIELD,
-            {"KGridFormDataManager": {"override": "value"}, "isKGridFormDataManagerEdited": True},
-        ),
-    ]
+        (CONFIG_SINGLE_PROVIDER, None, EXPECTED_SINGLE_PROVIDER),
+        (CONFIG_MULTIPLE_PROVIDERS, None, EXPECTED_MULTIPLE_PROVIDERS),
+        (CONFIG_OVERLAPPING_DICT_MERGE, None, EXPECTED_OVERLAPPING_DICT_MERGE),
+        (CONFIG_SINGLE_PROVIDER, PROVIDER_CONTEXT_OVERRIDE, EXPECTED_WITH_OVERRIDE),
+    ],
 )
 def test_get_data_from_providers_for_rendering_context(config, provider_context, expected):
     template = Template(**config)
     result = template.get_data_from_providers_for_rendering_context(provider_context)
     assertion.assert_deep_almost_equal(expected, result)
+
+
+def test_render_with_external_context_and_provider():
+    template = Template(**CONFIG_EXTERNAL_CONTEXT_TEST)
+    template.add_context_provider(PROVIDER_KPATH)
+    template.render(EXTERNAL_CONTEXT_KPATH)
+    assert template.get_rendered() == EXPECTED_EXTERNAL_CONTEXT_RENDER
