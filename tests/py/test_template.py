@@ -53,7 +53,11 @@ EXPECTED_FULL = {
     "applicationName": "espresso",
     "executableName": "pw.x",
     "contextProviders": [{"name": Name.KGridFormDataManager, **CONTEXT_PROVIDER_DEFAULT_FIELDS}],
-    **{k: v for k, v in TEMPLATE_DEFAULT_FIELDS.items() if k not in ["rendered", "applicationName", "executableName", "contextProviders"]},
+    **{
+        k: v
+        for k, v in TEMPLATE_DEFAULT_FIELDS.items()
+        if k not in ["rendered", "applicationName", "executableName", "contextProviders"]
+    },
 }
 
 CONFIG_INVALID_EMPTY = {}

@@ -1,8 +1,6 @@
-import json
 from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
-from jinja2 import Environment, TemplateError
 from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.template import TemplateSchema
 from mat3ra.utils.extra.jinja import render_jinja_with_error_handling
@@ -69,7 +67,9 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
         result: Dict[str, Any] = {}
         for provider in self.context_providers:
             context = provider.yield_data_for_rendering(provider_context)
+
             for key, value in context.items():
+                # merge context keys if they are objects otherwise override them.
                 if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                     result[key] = {**result[key], **value}
                 else:
@@ -92,11 +92,10 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
             rendered = render_jinja_with_error_handling(self.content, **cleaned_context)
             self.rendered = rendered or self.content
 
-
     def get_rendered_dict(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         self.render(context)
         return self.to_dict()
-    
+
     def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> str:
         self.render(context)
         return self.to_json()
