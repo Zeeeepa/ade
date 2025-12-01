@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional
 from jinja2 import Environment, TemplateError
 from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.template import TemplateSchema
+from mat3ra.utils.extra.jinja import render_jinja_with_error_handling
 from pydantic import Field
 
 from .context.context_provider import ContextProvider
@@ -62,7 +63,7 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
         cleaned.pop("job", None)
         return cleaned
 
-    def _get_data_from_providers_for_rendering_context(
+    def get_data_from_providers_for_rendering_context(
         self, provider_context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
@@ -81,22 +82,16 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
         provider_context = external_context or {}
         return {
             **(external_context or {}),
-            **self._get_data_from_providers_for_rendering_context(provider_context),
+            **self.get_data_from_providers_for_rendering_context(provider_context),
         }
 
     def render(self, external_context: Optional[Dict[str, Any]] = None) -> None:
         rendering_context = self._get_rendering_context(external_context)
         if not self.isManuallyChanged:
-            try:
-                env = Environment()
-                template = env.from_string(self.content)
-                cleaned_context = self._clean_rendering_context(rendering_context)
-                rendered = template.render(cleaned_context)
-                self.rendered = rendered or self.content
-            except TemplateError as e:
-                print(f"Template is not compiled: {e}")
-                print(f"content: {self.content}")
-                print(f"_clean_rendering_context: {self._clean_rendering_context(rendering_context)}")
+            cleaned_context = self._clean_rendering_context(rendering_context)
+            rendered = render_jinja_with_error_handling(self.content, **cleaned_context)
+            self.rendered = rendered or self.content
+
 
     def get_rendered_json(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         self.render(context)

@@ -114,6 +114,48 @@ EXTERNAL_CONTEXT_FOR_RENDERING = {
     "isKPathFormDataManagerEdited": True,
 }
 
+TEMPLATE_WITH_SINGLE_PROVIDER_CONFIG = {
+    "name": "test.in",
+    "content": "test content",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"kgrid": "4 4 4"}, isEdited=True),
+    ],
+}
+
+TEMPLATE_WITH_MULTIPLE_PROVIDERS_NON_OVERLAPPING = {
+    "name": "test.in",
+    "content": "test content",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"kgrid": "4 4 4"}, isEdited=True),
+        ContextProvider(name=Name.KPathFormDataManager, data={"path": "G-X-L"}, isEdited=False),
+    ],
+}
+
+TEMPLATE_WITH_MULTIPLE_PROVIDERS_OVERLAPPING_DICTS = {
+    "name": "test.in",
+    "content": "test content",
+    "contextProviders": [
+        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.5, "shift": [0, 0, 0]}),
+        ContextProvider(name=Name.KGridFormDataManager, data={"spacing": 0.3, "density": 10}),
+    ],
+}
+
+PROVIDER_CONTEXT_FOR_YIELD = {
+    "KGridFormDataManager": {"override": "value"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+EXPECTED_MERGED_DATA_NON_OVERLAPPING = {
+    "KGridFormDataManager": {"kgrid": "4 4 4"},
+    "isKGridFormDataManagerEdited": True,
+    "KPathFormDataManager": {"path": "G-X-L"},
+    "isKPathFormDataManagerEdited": False,
+}
+
+EXPECTED_MERGED_DATA_OVERLAPPING_DICTS = {
+    "KGridFormDataManager": {"spacing": 0.3, "shift": [0, 0, 0], "density": 10},
+}
+
 
 def test_template_creation():
     config = TEMPLATE_MINIMAL_CONFIG
