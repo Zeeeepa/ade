@@ -80,3 +80,19 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
     def yield_data_for_rendering(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         return self.yield_data(context)
 
+    def merge_context_data(self, result: Dict[str, Any], provider_context: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Merge this provider's rendering context data into result dictionary.
+        Merges context keys if they are objects, otherwise overrides them.
+
+        Args:
+            result: Dictionary to merge into (modified in place)
+            provider_context: Optional external context to override provider's internal data
+        """
+        context = self.yield_data_for_rendering(provider_context)
+        for key, value in context.items():
+            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+                result[key] = {**result[key], **value}
+            else:
+                result[key] = value
+

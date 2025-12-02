@@ -66,14 +66,7 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
     ) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
         for provider in self.context_providers:
-            context = provider.yield_data_for_rendering(provider_context)
-
-            for key, value in context.items():
-                # merge context keys if they are objects otherwise override them.
-                if key in result and isinstance(result[key], dict) and isinstance(value, dict):
-                    result[key] = {**result[key], **value}
-                else:
-                    result[key] = value
+            provider.merge_context_data(result, provider_context)
         return result
 
     def _get_rendering_context(

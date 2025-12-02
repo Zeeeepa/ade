@@ -60,6 +60,52 @@ EXPECTED_YIELD_DATA_WITH_STORED = {
     "isKPathFormDataManagerEdited": True,
 }
 
+PROVIDER_FOR_MERGE_DICT = ContextProvider(
+    name=Name.KGridFormDataManager, data={"spacing": 0.5, "shift": [0, 0, 0]}
+)
+
+PROVIDER_FOR_MERGE_OVERRIDE = ContextProvider(
+    name=Name.KGridFormDataManager, data={"spacing": 0.3, "density": 10}
+)
+
+RESULT_BEFORE_MERGE_DICT = {
+    "KGridFormDataManager": {"spacing": 0.5, "shift": [0, 0, 0]},
+    "isKGridFormDataManagerEdited": None,
+}
+
+EXPECTED_AFTER_MERGE_DICT = {
+    "KGridFormDataManager": {"spacing": 0.3, "shift": [0, 0, 0], "density": 10},
+    "isKGridFormDataManagerEdited": None,
+}
+
+PROVIDER_FOR_MERGE_NON_DICT = ContextProvider(
+    name=Name.KPathFormDataManager, data={"path": "G-X-L"}, isEdited=False
+)
+
+RESULT_BEFORE_MERGE_NON_DICT = {
+    "KGridFormDataManager": {"kgrid": "4 4 4"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+EXPECTED_AFTER_MERGE_NON_DICT = {
+    "KGridFormDataManager": {"kgrid": "4 4 4"},
+    "isKGridFormDataManagerEdited": True,
+    "KPathFormDataManager": {"path": "G-X-L"},
+    "isKPathFormDataManagerEdited": False,
+}
+
+PROVIDER_CONTEXT_FOR_MERGE = {
+    "KGridFormDataManager": {"override": "value"},
+    "isKGridFormDataManagerEdited": True,
+}
+
+RESULT_BEFORE_MERGE_WITH_CONTEXT = {}
+
+EXPECTED_AFTER_MERGE_WITH_CONTEXT = {
+    "KGridFormDataManager": {"override": "value"},
+    "isKGridFormDataManagerEdited": True,
+}
+
 
 def test_context_provider_creation():
     config = CONTEXT_PROVIDER_MINIMAL_CONFIG
@@ -130,4 +176,33 @@ def test_context_provider_yield_data_with_stored_context():
     result = provider.yield_data_for_rendering()
     expected = EXPECTED_YIELD_DATA_WITH_STORED
     assertion.assert_deep_almost_equal(expected, result)
+
+
+@pytest.mark.parametrize(
+    "provider,result_before,provider_context,expected_after",
+    [
+        (
+            PROVIDER_FOR_MERGE_OVERRIDE,
+            RESULT_BEFORE_MERGE_DICT,
+            None,
+            EXPECTED_AFTER_MERGE_DICT,
+        ),
+        (
+            PROVIDER_FOR_MERGE_NON_DICT,
+            RESULT_BEFORE_MERGE_NON_DICT,
+            None,
+            EXPECTED_AFTER_MERGE_NON_DICT,
+        ),
+        (
+            PROVIDER_FOR_MERGE_DICT,
+            RESULT_BEFORE_MERGE_WITH_CONTEXT,
+            PROVIDER_CONTEXT_FOR_MERGE,
+            EXPECTED_AFTER_MERGE_WITH_CONTEXT,
+        ),
+    ],
+)
+def test_merge_context_data(provider, result_before, provider_context, expected_after):
+    result = result_before.copy()
+    provider.merge_context_data(result, provider_context)
+    assertion.assert_deep_almost_equal(expected_after, result)
 
