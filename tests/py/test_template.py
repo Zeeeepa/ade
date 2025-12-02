@@ -31,13 +31,14 @@ CONFIG_MINIMAL = {
     "content": "&CONTROL\n/",
 }
 
+# snake_case and camelCase keys acceptable
 CONFIG_FULL = {
     "name": "pw_scf.in",
     "content": "&CONTROL\n/",
     "rendered": "rendered",
     "applicationName": "espresso",
-    "executableName": "pw.x",
-    "contextProviders": [ContextProvider(name=Name.KGridFormDataManager)],
+    "executable_name": "pw.x",
+    "context_providers": [ContextProvider(name=Name.KGridFormDataManager)],
 }
 
 EXPECTED_MINIMAL = {
