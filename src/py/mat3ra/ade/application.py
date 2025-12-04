@@ -24,5 +24,5 @@ class Application(ApplicationSchemaBase, InMemoryEntitySnakeCase):
         return self.name in material_using_applications
 
     def get_short_name(self) -> str:
-        return self.shortName if self.shortName else self.name
+        return self.short_name if self.short_name else self.name
 

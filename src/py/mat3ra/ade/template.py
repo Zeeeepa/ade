@@ -29,14 +29,6 @@ class Template(TemplateSchema, InMemoryEntitySnakeCase):
         default_factory=list, description="List of context providers for this template"
     )
 
-    @property
-    def context_providers(self) -> List[ContextProvider]:
-        return self.contextProviders
-
-    @context_providers.setter
-    def context_providers(self, value: List[ContextProvider]) -> None:
-        self.contextProviders = value
-
     def get_rendered(self) -> str:
         return self.rendered if self.rendered is not None else self.content
 

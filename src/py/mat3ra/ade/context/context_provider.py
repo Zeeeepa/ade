@@ -32,11 +32,11 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
 
     @property
     def is_unit_context_provider(self) -> bool:
-        return self.entityName == "unit"
+        return self.entity_name == "unit"
 
     @property
     def is_subworkflow_context_provider(self) -> bool:
-        return self.entityName == "subworkflow"
+        return self.entity_name == "subworkflow"
 
     def _get_data_from_context(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         if not context:
@@ -48,9 +48,9 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
         if data is not None:
             result["data"] = data
         if is_edited is not None:
-            result["isEdited"] = is_edited
+            result["is_edited"] = is_edited
         if extra_data is not None:
-            result["extraData"] = extra_data
+            result["extra_data"] = extra_data
         return result
 
     def _get_effective_data(self, context: Optional[Dict[str, Any]] = None) -> Any:
@@ -59,11 +59,11 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
 
     def _get_effective_is_edited(self, context: Optional[Dict[str, Any]] = None) -> bool:
         context_data = self._get_data_from_context(context or self.context)
-        return context_data.get("isEdited", self.isEdited)
+        return context_data.get("is_edited", self.is_edited)
 
     def _get_effective_extra_data(self, context: Optional[Dict[str, Any]] = None) -> Optional[Any]:
         context_data = self._get_data_from_context(context or self.context)
-        return context_data.get("extraData", self.extraData)
+        return context_data.get("extra_data", self.extra_data)
 
     def yield_data(self, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         data = self._get_effective_data(context)
