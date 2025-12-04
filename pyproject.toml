@@ -22,7 +22,7 @@ dependencies = [
     "numpy",
     "pydantic>=2.0",
     "mat3ra-esse",
-    "mat3ra-code",
+    "mat3ra-code @ git+https://github.com/Exabyte-io/code.git@4628bc093427f0ba475916f1d3231256f5ae9e78",
     "mat3ra-utils[extra]"
 ]
 
