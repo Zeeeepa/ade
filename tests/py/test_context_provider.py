@@ -39,12 +39,6 @@ EXTERNAL_CONTEXT_OVERRIDE = {
     "KPathFormDataManagerExtraData": {"extra_override": "data"},
 }
 
-EXPECTED_YIELD_DATA_WITH_EXTERNAL = {
-    "KPathFormDataManager": {"override": "value"},
-    "isKPathFormDataManagerEdited": True,
-    "KPathFormDataManagerExtraData": {"extra_override": "data"},
-}
-
 CONTEXT_PROVIDER_WITH_STORED_CONTEXT = {
     "name": Name.KPathFormDataManager,
     "data": {"default": "value"},
@@ -190,8 +184,7 @@ def test_yield_data_with_external_context():
     provider = ContextProvider(**CONTEXT_PROVIDER_WITH_DEFAULT_DATA)
     external_context = EXTERNAL_CONTEXT_OVERRIDE
     result = provider.yield_data_for_rendering(external_context)
-    expected = EXPECTED_YIELD_DATA_WITH_EXTERNAL
-    assertion.assert_deep_almost_equal(expected, result)
+    assertion.assert_deep_almost_equal(external_context, result)
 
 
 def test_yield_data_with_stored_context():
@@ -230,17 +223,7 @@ def test_merge_context_data(provider, result_before, provider_context, expected_
     assertion.assert_deep_almost_equal(expected_after, result)
 
 
-@pytest.mark.parametrize(
-    "provider_kwargs, external_context, expected_data",
-    [
-        (
-            CONTEXT_PROVIDER_FOR_GET_DATA,
-            EXTERNAL_CONTEXT_FOR_GET_DATA,
-            EXPECTED_DATA_FROM_GET_DATA,
-        ),
-    ],
-)
-def test_get_data(provider_kwargs, external_context, expected_data):
-    provider = ContextProvider(**provider_kwargs)
-    data = provider._get_data_from_context(external_context)
-    assertion.assert_deep_almost_equal(expected_data, data)
+def test_get_data():
+    provider = ContextProvider(**CONTEXT_PROVIDER_FOR_GET_DATA)
+    data = provider._get_data_from_context(EXTERNAL_CONTEXT_FOR_GET_DATA)
+    assertion.assert_deep_almost_equal(EXPECTED_DATA_FROM_GET_DATA, data)
