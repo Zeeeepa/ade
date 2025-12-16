@@ -19,6 +19,11 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
     """
 
     @property
+    def default_data(self) -> Optional[Any]:
+        """Override in subclasses to provide default data."""
+        return None
+
+    @property
     def name_str(self) -> str:
         return self.name.value if hasattr(self.name, 'value') else str(self.name)
 
@@ -55,7 +60,8 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
 
     def _get_effective_data(self, context: Optional[Dict[str, Any]] = None) -> Any:
         context_data = self._get_data_from_context(context or self.context)
-        return context_data.get("data", self.data)
+        effective_data = context_data.get("data", self.data)
+        return effective_data if effective_data is not None else self.default_data
 
     def _get_effective_is_edited(self, context: Optional[Dict[str, Any]] = None) -> bool:
         context_data = self._get_data_from_context(context or self.context)
@@ -96,3 +102,5 @@ class ContextProvider(ContextProviderSchema, InMemoryEntitySnakeCase):
             else:
                 result[key] = value
 
+    def get_data(self) -> Any:
+        return self.data if self.data is not None else self.default_data

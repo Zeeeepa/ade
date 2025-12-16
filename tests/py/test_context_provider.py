@@ -39,12 +39,6 @@ EXTERNAL_CONTEXT_OVERRIDE = {
     "KPathFormDataManagerExtraData": {"extra_override": "data"},
 }
 
-EXPECTED_YIELD_DATA_WITH_EXTERNAL = {
-    "KPathFormDataManager": {"override": "value"},
-    "isKPathFormDataManagerEdited": True,
-    "KPathFormDataManagerExtraData": {"extra_override": "data"},
-}
-
 CONTEXT_PROVIDER_WITH_STORED_CONTEXT = {
     "name": Name.KPathFormDataManager,
     "data": {"default": "value"},
@@ -106,8 +100,31 @@ EXPECTED_AFTER_MERGE_WITH_CONTEXT = {
     "isKGridFormDataManagerEdited": True,
 }
 
+CONTEXT_PROVIDER_FOR_GET_DATA = {
+    "name": Name.KPathFormDataManager,
+    "data": {"default": "value"},
+    "isEdited": False,
+    "context": {
+        "KPathFormDataManager": {"stored": "value"},
+        "isKPathFormDataManagerEdited": True,
+        "KPathFormDataManagerExtraData": {"extra_stored": "data"},
+    },
+}
 
-def test_context_provider_creation():
+EXTERNAL_CONTEXT_FOR_GET_DATA = {
+    "KPathFormDataManager": {"override": "value"},
+    "isKPathFormDataManagerEdited": False,
+    "KPathFormDataManagerExtraData": {"extra_override": "data"},
+}
+
+EXPECTED_DATA_FROM_GET_DATA = {
+    "data": {"override": "value"},
+    "is_edited": False,
+    "extra_data": {"extra_override": "data"},
+}
+
+
+def test_creation():
     config = CONTEXT_PROVIDER_MINIMAL_CONFIG
     provider = ContextProvider(**config)
     expected = {
@@ -117,19 +134,19 @@ def test_context_provider_creation():
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
-def test_context_provider_validation():
+def test_validation():
     with pytest.raises(Exception):
         ContextProvider()
 
 
-def test_context_provider_full_creation():
+def test_full_creation():
     config = CONTEXT_PROVIDER_FULL_CONFIG
     provider = ContextProvider(**config)
     expected = {**config}
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
-def test_context_provider_default_values():
+def test_default_values():
     config = CONTEXT_PROVIDER_MINIMAL_CONFIG
     provider = ContextProvider(**config)
     expected = {
@@ -139,39 +156,38 @@ def test_context_provider_default_values():
     assertion.assert_deep_almost_equal(expected, provider.to_dict())
 
 
-def test_context_provider_extra_data_key():
+def test_extra_data_key():
     provider = ContextProvider(name=Name.KPathFormDataManager)
     assert provider.extra_data_key == "KPathFormDataManagerExtraData"
 
 
-def test_context_provider_is_edited_key():
+def test_is_edited_key():
     provider = ContextProvider(name=Name.KPathFormDataManager)
     assert provider.is_edited_key == "isKPathFormDataManagerEdited"
 
 
-def test_context_provider_is_unit_context_provider():
+def test_is_unit_context_provider():
     unit_provider = ContextProvider(name=Name.KGridFormDataManager, entityName="unit")
     assert unit_provider.is_unit_context_provider is True
     subworkflow_provider = ContextProvider(name=Name.KGridFormDataManager, entityName="subworkflow")
     assert subworkflow_provider.is_unit_context_provider is False
 
 
-def test_context_provider_is_subworkflow_context_provider():
+def test_is_subworkflow_context_provider():
     unit_provider = ContextProvider(name=Name.KGridFormDataManager, entityName="unit")
     assert unit_provider.is_subworkflow_context_provider is False
     subworkflow_provider = ContextProvider(name=Name.KGridFormDataManager, entityName="subworkflow")
     assert subworkflow_provider.is_subworkflow_context_provider is True
 
 
-def test_context_provider_yield_data_with_external_context():
+def test_yield_data_with_external_context():
     provider = ContextProvider(**CONTEXT_PROVIDER_WITH_DEFAULT_DATA)
     external_context = EXTERNAL_CONTEXT_OVERRIDE
     result = provider.yield_data_for_rendering(external_context)
-    expected = EXPECTED_YIELD_DATA_WITH_EXTERNAL
-    assertion.assert_deep_almost_equal(expected, result)
+    assertion.assert_deep_almost_equal(external_context, result)
 
 
-def test_context_provider_yield_data_with_stored_context():
+def test_yield_data_with_stored_context():
     provider = ContextProvider(**CONTEXT_PROVIDER_WITH_STORED_CONTEXT)
     result = provider.yield_data_for_rendering()
     expected = EXPECTED_YIELD_DATA_WITH_STORED
@@ -206,3 +222,8 @@ def test_merge_context_data(provider, result_before, provider_context, expected_
     provider.merge_context_data(result, provider_context)
     assertion.assert_deep_almost_equal(expected_after, result)
 
+
+def test_get_data():
+    provider = ContextProvider(**CONTEXT_PROVIDER_FOR_GET_DATA)
+    data = provider._get_data_from_context(EXTERNAL_CONTEXT_FOR_GET_DATA)
+    assertion.assert_deep_almost_equal(EXPECTED_DATA_FROM_GET_DATA, data)
