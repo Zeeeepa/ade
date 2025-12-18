@@ -46,6 +46,7 @@ FLAVOR_FROM_DICT_CONFIG = {
 
 FLAVOR_WITH_EXTRA_FIELDS_CONFIG = {
     "name": "scf",
+    "executableId": "exe_123",
     "custom_field": "custom_value",
 }
 
@@ -99,4 +100,6 @@ def test_flavor_with_extra_fields():
     config = FLAVOR_WITH_EXTRA_FIELDS_CONFIG
     flavor = Flavor(**config)
     assert flavor.name == "scf"
-    assert not hasattr(flavor, "custom_field")
+    assert hasattr(flavor, "custom_field")
+    assert flavor.custom_field == "custom_value"
+    assert "custom_field" in flavor.to_dict()
