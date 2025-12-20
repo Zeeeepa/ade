@@ -1,8 +1,5 @@
-from typing import Optional
-
 from mat3ra.code.entity import InMemoryEntitySnakeCase
 from mat3ra.esse.models.software.application import ApplicationSchemaBase
-from pydantic import ConfigDict, Field
 
 
 class Application(ApplicationSchemaBase, InMemoryEntitySnakeCase):
@@ -20,9 +17,6 @@ class Application(ApplicationSchemaBase, InMemoryEntitySnakeCase):
         isDefault: Identifies that entity is defaultable
         schemaVersion: Entity's schema version
     """
-    isLicensed: bool = Field(default=False)
-    hasAdvancedComputeOptions: bool = Field(default=False)
-    isDefault: bool = Field(default=False)
 
     @property
     def is_using_material(self) -> bool:

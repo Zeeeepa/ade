@@ -58,17 +58,9 @@ EXPECTED_FLAVOR_TO_DICT = {
     "executableName": "pw.x",
     "applicationName": "espresso",
     "input": [],
-    "supportedApplicationVersions": None,
-    "id": None,
-    "slug": None,
-    "systemName": None,
     "schemaVersion": "2022.8.16",
     "name": "scf",
     "isDefault": False,
-    "preProcessors": None,
-    "postProcessors": None,
-    "monitors": None,
-    "results": None,
 }
 
 

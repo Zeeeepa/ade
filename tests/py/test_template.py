@@ -14,16 +14,8 @@ CONTEXT_PROVIDER_DEFAULT_FIELDS = {
 }
 
 TEMPLATE_DEFAULT_FIELDS = {
-    "rendered": None,
-    "applicationName": None,
-    "applicationVersion": None,
-    "executableName": None,
     "contextProviders": [],
-    "isManuallyChanged": None,
     "schemaVersion": "2022.8.16",
-    "systemName": None,
-    "slug": None,
-    "id": None,
 }
 
 CONFIG_MINIMAL = {
