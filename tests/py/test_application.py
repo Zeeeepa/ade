@@ -7,7 +7,7 @@ APPLICATION_DEFAULT_FIELDS = {
     "build": None,
     "hasAdvancedComputeOptions": None,
     "isLicensed": None,
-    "field_id": None,
+    "id": None,
     "slug": None,
     "systemName": None,
     "schemaVersion": "2022.8.16",

@@ -23,7 +23,7 @@ TEMPLATE_DEFAULT_FIELDS = {
     "schemaVersion": "2022.8.16",
     "systemName": None,
     "slug": None,
-    "field_id": None,
+    "id": None,
 }
 
 CONFIG_MINIMAL = {
