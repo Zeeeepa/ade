@@ -4,14 +4,7 @@ from mat3ra.ade import ContextProvider, Template
 from mat3ra.esse.models.context_provider import Name
 from mat3ra.utils import assertion
 
-CONTEXT_PROVIDER_DEFAULT_FIELDS = {
-    "domain": None,
-    "entityName": None,
-    "data": None,
-    "extraData": None,
-    "isEdited": None,
-    "context": None,
-}
+CONTEXT_PROVIDER_DEFAULT_FIELDS = {}
 
 TEMPLATE_DEFAULT_FIELDS = {
     "contextProviders": [],
